@@ -1,0 +1,39 @@
+@use '../../scss/base.scss' as base;
+
+.tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  float: left;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  
+  background: transparent;
+  border: none;
+}
+
+.guideline {
+  &:before, &:after {
+    position: absolute;
+    display: block;
+    background: base.$color-board-guideline;
+    content: "";
+  }
+
+  &:before {
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+  }
+
+  &:after {
+    left: 50%;
+    top: 0;
+    width: 1px;
+    height: 100%;
+  }
+}

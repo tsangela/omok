@@ -1,0 +1,33 @@
+@use '../../scss/base.scss' as base;
+
+.selectionContainer {
+  display: grid;
+  grid-gap: base.$spacing-8;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.button {
+  border: transparent;
+  border-radius: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: base.$spacing-64;
+  height: base.$spacing-64;
+  
+  transition: 0.2s ease;
+  background: transparent;
+
+  img {
+    transition: 0.2s ease;
+    &:hover {
+        transform: scale(1.2);
+    }
+  }
+}
+
+.selected {
+  background: base.$color-button-selected;
+}

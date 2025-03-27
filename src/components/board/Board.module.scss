@@ -1,0 +1,18 @@
+@use '../../scss/base.scss' as base;
+
+.board {
+  position: relative;
+
+  padding: base.$spacing-24;
+  background: base.$color-board-background;
+  border: 1px solid base.$color-board-guideline;
+}
+
+.fixedBoard {
+  position: absolute;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(base.$size-row, 1fr);
+}
