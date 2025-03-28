@@ -1,3 +1,4 @@
+// Generic colors
 $color-black: #252525;
 $color-darkgrey: #4b4b4b;
 $color-grey: #999;
@@ -6,11 +7,18 @@ $color-lightblue: #bed0de;
 $color-bluegrey: #769aab;
 $color-red: #de2a1b;
 
+// Omok piece colors
+$color-slime: #66dd22;
+$color-mushroom: #ff9900;
+$color-pig: #ff9966;
+$color-octopus: #993388;
+$color-pinkteddy: #ff7799;
+$color-pandateddy: #ffffff;
+$color-bloctopus: #eeaaff;
+$color-trixter: #ffee00;
 
 $color-board-background: $color-white;
 $color-board-guideline: $color-grey;
-
-$border-board: 1px solid $color-board-guideline;
 
 $color-card-background: $color-lightblue;
 $color-card-border: $color-bluegrey;
@@ -20,11 +28,11 @@ $color-card-highlight: $color-red;
 $color-text-dark: $color-black;
 $color-text-default: $color-grey;
 
-$color-button-selected: $color-bluegrey;
-
 $font-size-small: 12px;
 $font-size-medium: 14px;
 $icon-size: 24px;
+
+$border-board: 1px solid $color-board-guideline;
 
 $spacing-2: 2px;
 $spacing-4: 4px;
@@ -34,7 +42,9 @@ $spacing-24: 24px;
 $spacing-40: 40px;
 $spacing-64: 64px;
 
-$size-row: 15;
-$size-column: 15;
-
 $size-icon: 24px;
+
+$num-rows: 15;
+$num-columns: 15;
+
+$transition: 0.2s ease;

@@ -1,11 +1,23 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+@import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap");
 
+:root {
   background: papayawhip;
   color-scheme: light dark;
+
+  font-family: "Nanum Gothic Coding", monospace;
+  font-style: normal;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+
+  &:disabled:hover {
+    cursor: default;
+  }
 }

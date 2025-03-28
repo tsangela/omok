@@ -14,5 +14,5 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(base.$size-row, 1fr);
+  grid-template-columns: repeat(base.$num-rows, 1fr);
 }

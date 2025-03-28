@@ -1,25 +1,26 @@
-import { useState } from "react";
+import { useSelector } from "react-redux";
+import { selectPlayers } from "../../store/gameSlice";
 import { PlayerSelection } from "../setup/PlayerSelection";
-import { OmokPieceType } from "../../utils/enums";
 import { Board } from "../board/Board";
 
 import styles from "./Game.module.scss";
+import { useState } from "react";
+import { Profile } from "../profile/Profile";
 
 export default function Game() {
-  const [typeOne, setTypeOne] = useState<OmokPieceType | undefined>(undefined);
-  const [typeTwo, setTypeTwo] = useState<OmokPieceType | undefined>(undefined);
+  const players = useSelector(selectPlayers);
+  const [showBoard, setShowBoard] = useState(false);
 
   return (
     <div className={styles.game}>
-      <PlayerSelection
-        typeOne={typeOne}
-        typeTwo={typeTwo}
-        setTypeOne={setTypeOne}
-        setTypeTwo={setTypeTwo}
-      />
-      {typeOne && typeTwo && (
-        <Board players={[typeOne, typeTwo]} />
-      )}
+      {/* {!showBoard && <PlayerSelection setShowBoard={setShowBoard} />} */}
+      <PlayerSelection setShowBoard={setShowBoard} />
+      <div className={styles.profilesContainer}>
+        {players.filter(player => !!player).map((player, i) => (
+          <Profile key={`player_${i}`} order={i} type={player} />
+        ))}
+      </div>
+      {showBoard && <Board />}
     </div>
   )
 }

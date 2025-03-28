@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
-import { OmokPieces } from "../../api/items";
+import { OmokPieces } from "../../api/omok";
 import { getRandomCharacterImage } from "../../api/character";
 import { classNames } from "../../utils/classNames";
 import { OmokPieceType } from "../../utils/enums"
 import Messages from "../../utils/messages";
 
 import styles from "./Profile.module.scss";
+import { useSelector } from "react-redux";
+import { selectTurn } from "../../store/gameSlice";
 
 type ProfileProps = {
-  isNext: boolean,
+  order: number,
   type: OmokPieceType,
 }
 
@@ -67,7 +69,8 @@ function Stat({ id, value } : { id: string; value: number; }) {
   )
 }
 
-export function Profile({ isNext, type }: ProfileProps) {
+export function Profile({ order, type }: ProfileProps) {
+  const turn = useSelector(selectTurn);
   const [character, setCharacter] = useState<string | undefined>(undefined);
 
   useEffect(() => {
@@ -75,7 +78,7 @@ export function Profile({ isNext, type }: ProfileProps) {
   }, []);
 
   return (
-    <div className={classNames(styles.card, isNext && styles.highlight)}>
+    <div className={classNames(styles.card, turn === order && styles.highlight)}>
       <ProfileImage src={character} />
       <ProfileName name={OmokPieces[type].name} />
       <ProfileStats stats={mockStats} />

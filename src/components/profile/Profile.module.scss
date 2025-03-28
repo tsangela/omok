@@ -21,15 +21,10 @@ $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
   -webkit-box-shadow: inset $box-shadow;
   -moz-box-shadow: inset $box-shadow;
   box-shadow: $box-shadow;
-
-  img {
-
-  }
 }
 
 .highlight {
-  box-sizing: border-box;
-  border: 4px solid base.$color-card-highlight;
+  outline: 4px solid base.$color-card-highlight;
 }
 
 .name {
@@ -67,7 +62,7 @@ $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
 }
 
 .label {
-  font-size: base.$font-size-medium;
+  font-size: base.$font-size-medium; // todo: just use built-in ones
 }
 
 .value {

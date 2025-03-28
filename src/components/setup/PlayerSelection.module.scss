@@ -3,10 +3,25 @@
 .selectionContainer {
   display: grid;
   grid-gap: base.$spacing-8;
+}
+
+.omokPiecesContainer {
+  display: grid;
+  grid-gap: base.$spacing-8;
   grid-template-columns: repeat(4, 1fr);
 }
 
-.button {
+.omokPieceButton, .startButton {
+  transition: base.$transition;
+
+  &:not(:disabled) {
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+}
+
+.omokPieceButton {
   border: transparent;
   border-radius: 100%;
 
@@ -17,17 +32,17 @@
   width: base.$spacing-64;
   height: base.$spacing-64;
   
-  transition: 0.2s ease;
   background: transparent;
+}
 
-  &:not(:disabled) {
-    img {
-      transition: 0.2s ease;
-      &:hover {
-          transform: scale(1.2);
-      }
-    }
-  }
+.startButton {
+  justify-self: center;
+  width: fit-content;
+  padding: base.$spacing-8 base.$spacing-16;
+  background-image: linear-gradient(to right, base.$color-pinkteddy, base.$color-bloctopus);
+  border-radius: 100px;
+  border: none;
+  font-size: large;
 }
 
 .selected {

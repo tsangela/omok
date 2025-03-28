@@ -6,5 +6,5 @@ export enum OmokPieceType {
   PinkTeddy = "PinkTeddy",
   PandaTeddy = "PandaTeddy",
   Bloctopus = "Bloctopus",
-  Trixter = "Trixter"
+  Trixter = "Trixter",
 }

@@ -1,44 +1,15 @@
-import { buildRequestUrl, Endpoints, Method, random } from "./apiUtils";
 import skins from "./data/skins.json";
 import ears from "./data/ears.json";
-
-type FaceResponse = {
-  faceId: number,
-  name: string,
-}
+import { buildRequestUrl, Endpoints, Method, random } from "./apiUtils";
+import { Face, Hair } from "../utils/types";
 
 type FacesResponse = {
-  result: FaceResponse[]
-}
-
-// Retrieves the list of character face numerical ids
-async function getFaces() {
-  const response = await fetch(buildRequestUrl(Endpoints.Faces));
-  if (!response.ok) {
-    throw new Error(`Failed to fetch faces: ${response.status}`);
-  }
-  const data: FacesResponse = await response.json();
-  return data?.result?.map(face => face.faceId);
-}
-
-type HairResponse = {
-  hairId: number,
-  name: string,
-}
+  result: Face[]
+};
 
 type HairsResponse = {
-  result: HairResponse[]
-}
-
-// Retrieves the list of character hair numerical ids
-async function getHairs() {
-  const response = await fetch(buildRequestUrl(Endpoints.Hairs));
-  if (!response.ok) {
-    throw new Error(`Failed to fetch faces: ${response.status}`);
-  }
-  const data: HairsResponse = await response.json();
-  return data?.result?.map(hair => hair.hairId);
-}
+  result: Hair[]
+};
 
 type CharacterRequest = {
   skin: string,
@@ -51,6 +22,29 @@ type CharacterRequest = {
   ears: string,
   itemIds: number[],
   effectFrame: number,
+};
+
+export const getEars = () => ears;
+
+export const getSkins = () => skins;
+
+// Retrieves the list of character face numerical ids
+async function getFaces() {
+  const response = await fetch(buildRequestUrl(Endpoints.Faces));
+  if (!response.ok) {
+    throw new Error(`Failed to fetch faces: ${response.status}`);
+  }
+  const data: FacesResponse = await response.json();
+  return data?.result?.map(face => face.faceId);
+}
+// Retrieves the list of character hair numerical ids
+async function getHairs() {
+  const response = await fetch(buildRequestUrl(Endpoints.Hairs));
+  if (!response.ok) {
+    throw new Error(`Failed to fetch faces: ${response.status}`);
+  }
+  const data: HairsResponse = await response.json();
+  return data?.result?.map(hair => hair.hairId);
 }
 
 // Creates a customized character image
@@ -70,7 +64,7 @@ export async function getCharacterImage(request: CharacterRequest) {
 }
 
 export async function getRandomCharacterImage() {
-  const mockUrl = "https://msavatar1.nexon.net/Character/HMENAFOGKJLEHOFCNPLOBHAKFCEKMJNMNCLPFEIDAPDGGPFGDGGNLBHCELLNEPFAELKJMJOCDBMOIEMDGNCJFLGCGHONFNKIPDELFJBPIJJFIKBJKOEBEOAEBADLNFBMHBKGHOMBKKLLALJJEPKEHGILPDAIMGBIGFAEINEOCAFCLGKLDKEHFGFCOEPOJFNJBKNCLNNMIEAJBPKPFILFEJAGIDCPAAENMBGODHGCNBOIOKPGJDHIFPCAGJIFGFKB.png";
+  const mockUrl = "https://i.mapleranks.com/u/NILBICJDEEPALBMDKBIMKNNAJLCGDKKDCELGIEEIMFNFPDDLCLJKAKADFHNEAIPABHAPMCKGCDHHABFKJDMOBPPNNLJCELKIPPIHGPMAEIHEFNMEDBDLDMIHIPJHHEPLLNPJADDPLAINPFHAJDIDEKEJJOMGJAKAMDBBEPDFCPCPECFJGNAFONJAKIDKPAIMNFLMCPDEHDLKGBMHIGIHBDBKGHIKPBOIKHPIEEAEIAINPBNPLEMMDPEOHACNCICP.png";
   return mockUrl;
   const request: CharacterRequest = {
     skin: random(skins),

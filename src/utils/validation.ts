@@ -1,4 +1,4 @@
-import { BoardValue } from "./types";
+import { BoardValue, Players } from "./types";
 
 const Messages = {
   MissingPlayerSelection: "Select your omok pieces to proceed.",
@@ -6,7 +6,9 @@ const Messages = {
   GenericError: "Cannot execute move.",
 }
 
-const inBound = (index: number, array: any[]) => index >= 0 && index < array.length;
+export const inBound = (index: number, array: any[]) => index >= 0 && index < array.length;
+
+export const arePlayersSelected = (players: Players) => players.length === 2 && players.every(player => !!player);
 
 function validateMove(index: number, values: BoardValue[]): string {
   if (!inBound(index, values)) {

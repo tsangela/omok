@@ -23,24 +23,31 @@ export function BoardTile({ value }: BoardTileProps) {
 
 interface PreviewTileProps extends TileProps {
   index: number;
+  canPreview: boolean;
   placePiece: (i: number) => void;
   type: OmokPieceType;
 }
 
-export function PreviewTile({ index, placePiece, type }: PreviewTileProps) {
+export function PreviewTile({ index, canPreview, placePiece, type }: PreviewTileProps) {
   const [show, setShow] = useState<boolean>(false);
 
-  const onMouseOver = () => setShow(true);
+  const onMouseOver = () => setShow(canPreview);
   const onMouseLeave = () => setShow(false);
+  const onClick = () => {
+    placePiece(index);
+    setShow(false);
+  }
 
   return (
     <button
       className={styles.tile}
+      disabled={!canPreview}
+      aria-disabled={!canPreview}
       onMouseOver={onMouseOver}
       onFocus={onMouseOver}
       onMouseLeave={onMouseLeave}
       onBlur={onMouseLeave}
-      onClick={() => placePiece(index)}
+      onClick={onClick}
     >
       {show ? <OmokPiece preview type={type} /> : null}
     </button>

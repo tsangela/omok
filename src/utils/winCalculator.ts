@@ -53,6 +53,10 @@ function hasWin(indices: number[], values: BoardValue[], type: OmokPieceType) {
 }
 
 export function isWinner(index: number, values: BoardValue[], type: OmokPieceType) {
+    if (!type || type === undefined) {
+        return false;
+    }
+
     // Search horizontally
     const rowIndices = getRowIndices(index);
     if (hasWin(rowIndices, values, type)) {

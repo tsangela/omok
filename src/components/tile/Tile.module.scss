@@ -1,5 +1,7 @@
 @use '../../scss/base.scss' as base;
 
+$tile-width: 3.125rem;
+
 .tile {
   position: relative;
   display: flex;
@@ -7,8 +9,8 @@
   justify-content: center;
 
   float: left;
-  width: 3rem;
-  height: 3rem;
+  width: $tile-width;
+  height: $tile-width;
   padding: 0;
   
   background: transparent;

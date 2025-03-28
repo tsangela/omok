@@ -1,6 +1,15 @@
+@use '../../scss/base.scss' as base;
+
 .game {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  grid-gap: base.$spacing-24;
+}
+
+.profilesContainer {
+  display: grid;
+  grid-gap: base.$spacing-8;
+  grid-template-columns: repeat(2, 1fr);
 }

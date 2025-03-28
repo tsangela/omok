@@ -1,4 +1,4 @@
-import { OmokPieces } from "../../api/items";
+import { OmokPieces } from "../../api/omok";
 import { classNames } from "../../utils/classNames";
 import { OmokPieceType } from "../../utils/enums";
 

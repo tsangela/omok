@@ -1,6 +1,6 @@
 import { OmokPieceType } from "../utils/enums";
 import { Id, Item } from "../utils/types";
-import { buildRequestUrl, Endpoints, fetchImage, MAPLESTORY_API_HOST } from "./apiUtils";
+import { buildRequestUrl, Endpoints, fetchImage } from "./apiUtils";
 
 export const OmokPieces: { [key in OmokPieceType]: Item } = {
   [OmokPieceType.Slime]: {
