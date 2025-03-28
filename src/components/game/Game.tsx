@@ -11,18 +11,15 @@ export default function Game() {
 
   return (
     <div className={styles.game}>
-      {typeOne && typeTwo
-        ? (
-          <Board players={[typeOne, typeTwo]} />
-        ) : (
-          <PlayerSelection
-            typeOne={typeOne}
-            typeTwo={typeTwo}
-            setTypeOne={setTypeOne}
-            setTypeTwo={setTypeTwo}
-          />
-        )
-      }
+      <PlayerSelection
+        typeOne={typeOne}
+        typeTwo={typeTwo}
+        setTypeOne={setTypeOne}
+        setTypeTwo={setTypeTwo}
+      />
+      {typeOne && typeTwo && (
+        <Board players={[typeOne, typeTwo]} />
+      )}
     </div>
   )
 }

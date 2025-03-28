@@ -5,7 +5,7 @@
 
   padding: base.$spacing-24;
   background: base.$color-board-background;
-  border: 1px solid base.$color-board-guideline;
+  border: base.$border-board;
 }
 
 .fixedBoard {

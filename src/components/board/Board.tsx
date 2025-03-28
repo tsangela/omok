@@ -6,6 +6,7 @@ import { isWinner } from "../../utils/winCalculator";
 import { BoardTile, PreviewTile } from "../tile/Tile";
 
 import styles from "./Board.module.scss";
+import { Profile } from "../profile/Profile";
 
 type BoardProps = {
   readonly players: [OmokPieceType, OmokPieceType];
@@ -37,20 +38,20 @@ export function Board({ players }: BoardProps) {
       return;
     }
 
-    // Next player's move
+    // Next player's turn
     setTurn(((turn + 1) % 2) as 0 | 1);
   }
 
   function renderTiles(Tile: typeof BoardTile | typeof PreviewTile) {
     return (
       <div className={styles.grid}>
-        {values.map((piece: BoardValue, i: number) => (
+        {values.map((value: BoardValue, i: number) => (
           <Tile
             key={`tile_${i}`}
             index={i}
             placePiece={placePiece}
-            type={players[turn]} // todo(atsang): current player
-            value={piece}
+            type={players[turn]}
+            value={value}
           />
         ))}
       </div>
@@ -58,11 +59,16 @@ export function Board({ players }: BoardProps) {
   }
 
   return (
-    <div className={styles.board}>
-      <div className={styles.fixedBoard}>
-        {renderTiles(BoardTile)}
+    <>
+      <Profile isNext={turn === 0} type={players[0]} />
+      <Profile isNext={turn === 1} type={players[1]} />
+
+      <div className={styles.board}>
+        <div className={styles.fixedBoard}>
+          {renderTiles(BoardTile)}
+        </div>
+        {renderTiles(PreviewTile)}
       </div>
-      {renderTiles(PreviewTile)}
-    </div>
+    </>
   )
 }

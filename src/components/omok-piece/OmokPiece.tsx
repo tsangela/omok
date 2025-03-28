@@ -4,19 +4,13 @@ import { OmokPieceType } from "../../utils/enums";
 
 import styles from './OmokPiece.module.scss';
 
-enum PieceSize {
-  Small = 'small',
-  Medium = 'medium',
-  Large = 'large',
-}
-
 interface OmokPieceProps {
   preview?: boolean,
-  size?: PieceSize,
+  size?: "small" | "medium" | "large" | "xlarge",
   type: OmokPieceType,
 }
 
-export function OmokPiece({ preview, type, size = PieceSize.Medium }: OmokPieceProps) {
+export function OmokPiece({ preview, type, size = "medium" }: OmokPieceProps) {
   const piece = OmokPieces[type];
   const className = classNames(
     preview && styles.preview,

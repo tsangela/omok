@@ -1,58 +1,52 @@
 import { OmokPieceType } from "../utils/enums";
-import { Item, ItemId } from "../utils/types";
+import { Id, Item } from "../utils/types";
+import { buildRequestUrl, Endpoints, fetchImage, MAPLESTORY_API_HOST } from "./apiUtils";
 
 export const OmokPieces: { [key in OmokPieceType]: Item } = {
   [OmokPieceType.Slime]: {
     id: 4030000,
     name: "Slime",
-    url: "",
+    url: "https://api.maplestory.net/item/4030000/iconRaw",
   },
   [OmokPieceType.Mushroom]: {
     id: 4030001,
     name: "Mushroom",
-    url: "",
+    url: "https://api.maplestory.net/item/4030001/iconRaw",
   },
   [OmokPieceType.Octopus]: {
     id: 4030010,
     name: "Octopus",
-    url: "",
+    url: "https://api.maplestory.net/item/4030010/iconRaw",
   },
   [OmokPieceType.Pig]: {
     id: 4030011,
     name: "Pig",
-    url: "",
+    url: "https://api.maplestory.net/item/4030011/iconRaw",
   },
   [OmokPieceType.PinkTeddy]: {
     id: 4030014,
     name: "Pink Teddy",
-    url: "",
+    url: "https://api.maplestory.net/item/4030014/iconRaw",
   },
   [OmokPieceType.PandaTeddy]: {
     id: 4030015,
     name: "Panda Teddy",
-    url: "",
+    url: "https://api.maplestory.net/item/4030015/iconRaw",
   },
   [OmokPieceType.Bloctopus]: {
     id: 4030013,
     name: "Bloctopus",
-    url: "",
+    url: "https://api.maplestory.net/item/4030013/iconRaw",
   },
   [OmokPieceType.Trixter]: {
     id: 4030016,
     name: "Trixter",
-    url: "",
+    url: "https://api.maplestory.net/item/4030016/iconRaw",
   },
 }
 
-export async function fetchImage(id: ItemId) {
-  const response = await fetch(`https://api.maplestory.net/item/${id}/iconRaw`);
-  if (!response.ok) {
-    throw new Error(`Response status: ${response.status}`);
-  }
-  const blob = await response.blob();
-  return URL.createObjectURL(blob);
-}
+const buildItemUrl = (id: Id) => `${buildRequestUrl(Endpoints.Item)}/${id}/iconRaw`;
 
-export async function fetchOmokPieces() {
-  return Promise.all(Object.values(OmokPieces).map(({ id }) => fetchImage(id)));
+export async function getOmokPieces() {
+  return Promise.all(Object.values(OmokPieces).map(({ id }) => fetchImage(buildItemUrl(id))));
 }

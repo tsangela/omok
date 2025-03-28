@@ -20,14 +20,16 @@
   transition: 0.2s ease;
   background: transparent;
 
-  img {
-    transition: 0.2s ease;
-    &:hover {
-        transform: scale(1.2);
+  &:not(:disabled) {
+    img {
+      transition: 0.2s ease;
+      &:hover {
+          transform: scale(1.2);
+      }
     }
   }
 }
 
 .selected {
-  background: base.$color-button-selected;
+  opacity: 0.4;
 }

@@ -1,17 +1,40 @@
+$color-black: #252525;
+$color-darkgrey: #4b4b4b;
 $color-grey: #999;
 $color-white: #fff;
+$color-lightblue: #bed0de;
+$color-bluegrey: #769aab;
+$color-red: #de2a1b;
+
 
 $color-board-background: $color-white;
 $color-board-guideline: $color-grey;
+
+$border-board: 1px solid $color-board-guideline;
+
+$color-card-background: $color-lightblue;
+$color-card-border: $color-bluegrey;
+$color-card-label: $color-bluegrey;
+$color-card-highlight: $color-red;
+
+$color-text-dark: $color-black;
 $color-text-default: $color-grey;
-$color-button-selected: salmon;
 
-$size-row: 15;
-$size-column: 15;
+$color-button-selected: $color-bluegrey;
 
+$font-size-small: 12px;
+$font-size-medium: 14px;
+$icon-size: 24px;
+
+$spacing-2: 2px;
 $spacing-4: 4px;
 $spacing-8: 8px;
 $spacing-16: 16px;
 $spacing-24: 24px;
 $spacing-40: 40px;
 $spacing-64: 64px;
+
+$size-row: 15;
+$size-column: 15;
+
+$size-icon: 24px;

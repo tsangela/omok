@@ -1,9 +1,9 @@
 import { OmokPieceType } from "./enums";
 
-export type ItemId = number;
+export type Id = number;
 
 export type Item = {
-  readonly id: ItemId;
+  readonly id: Id;
   readonly name: string;
   url: string;
 };

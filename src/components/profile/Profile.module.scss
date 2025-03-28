@@ -1,0 +1,81 @@
+@use '../../scss/base.scss' as base;
+
+$width: 120px;
+$padding: base.$spacing-2;
+$box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
+
+.card {
+  position: relative;
+  display: grid;
+  grid-gap: base.$spacing-2;
+  width: $width;
+}
+
+.character {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $padding;
+
+  background: base.$color-card-background;
+  -webkit-box-shadow: inset $box-shadow;
+  -moz-box-shadow: inset $box-shadow;
+  box-shadow: $box-shadow;
+
+  img {
+
+  }
+}
+
+.highlight {
+  box-sizing: border-box;
+  border: 4px solid base.$color-card-highlight;
+}
+
+.name {
+  text-align: center;
+  padding: $padding;
+  background: base.$color-bluegrey;
+}
+
+.stats {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-gap: 1px;
+  background: base.$color-card-background;
+  border: 1px solid base.$color-card-background;
+
+  > * {
+    background: base.$color-white;
+    padding: $padding;
+  }
+}
+
+.total {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+
+.spacedSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.label {
+  font-size: base.$font-size-medium;
+}
+
+.value {
+  font-weight: 500;
+}
+
+.omokIcon {
+  position: absolute;
+  left: base.$spacing-8;
+  bottom: base.$spacing-8;
+}

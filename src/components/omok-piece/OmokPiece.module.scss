@@ -1,6 +1,9 @@
+@use '../../scss/base.scss' as base;
+
 .omokIcon {
   z-index: 1;
   image-rendering: pixelated;
+  width: base.$size-icon;
 }
 
 .preview {
@@ -17,4 +20,8 @@
 
 .large {
   zoom: 3;
+}
+
+.xlarge {
+  zoom: 4;
 }
