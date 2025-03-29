@@ -1,4 +1,4 @@
-import { OmokPieceType } from "./enums";
+import { OmokPieceType, ScoreType } from "./enums";
 
 export type Id = number;
 
@@ -23,10 +23,10 @@ export type Skin = string;
 export type Ear = string;
 
 export type Score = {
-  points: number;
-  winCount: number;
-  lossCount: number;
-  tieCount: number;
+  [ScoreType.Point]: number;
+  [ScoreType.Win]: number;
+  [ScoreType.Loss]: number;
+  [ScoreType.Tie]: number;
 }
 
 export type Player = {

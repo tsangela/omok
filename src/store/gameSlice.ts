@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from './store'
 import { Player, Players } from '../utils/types'
-import { OmokPieceType } from '../utils/enums'
+import { OmokPieceType, ScoreType } from '../utils/enums'
 
 interface GameState {
   players: Players;
@@ -14,10 +14,10 @@ const buildPlayer = (order: number): Player => ({
   name: '',
   imageUrl: '',
   score: {
-    points: 0,
-    winCount: 0,
-    lossCount: 0,
-    tieCount: 0,
+    [ScoreType.Point]: 0,
+    [ScoreType.Win]: 0,
+    [ScoreType.Loss]: 0,
+    [ScoreType.Tie]: 0,
   },
 })
 

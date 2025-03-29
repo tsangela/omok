@@ -8,3 +8,10 @@ export enum OmokPieceType {
   Bloctopus = "Bloctopus",
   Trixter = "Trixter",
 }
+
+export enum ScoreType {
+  Point = "point",
+  Win = "win",
+  Loss = "loss",
+  Tie = "tie",
+}

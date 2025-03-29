@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { selectTurn } from "../../store/gameSlice";
 import { Spinner } from "../spinner/Spinner";
 import { Player, Score } from "../../utils/types";
+import { ScoreType } from "../../utils/enums";
 
 type ProfileProps = {
   order: number,
@@ -56,15 +57,15 @@ function ProfileName({ name }: { name: string; }) {
 }
 
 function ProfileStats({ score } : { score: Score }) {
-  const { points, ...rest } = score;
+  const { [ScoreType.Point]: points, ...rest } = score;
 
   return (
     <div className={styles.stats}>
-      <Stat id="points" value={points} />
+      <Stat id={ScoreType.Point} value={points} />
       <div className={styles.total}>
         <span className={styles.label}>{Messages.total}</span>
         <div>
-          {Object.entries(rest).map((([k, v]) => <Stat key={k} id={k} value={v} />))}
+          {Object.entries(rest).map(([key, value]) => <Stat key={key} id={key} value={value} />)}
         </div>
       </div>
     </div>
@@ -82,8 +83,8 @@ function Stat({ id, value } : { id: string; value: number; }) {
 }
 
 const statLabels: { [id: string]: string } = {
-  points: Messages.points,
-  winCount: Messages.won,
-  lossCount: Messages.lost,
-  tieCount: Messages.tied,
+  [ScoreType.Point]: Messages.points,
+  [ScoreType.Win]: Messages.won,
+  [ScoreType.Loss]: Messages.lost,
+  [ScoreType.Tie]: Messages.tied,
 };
