@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectPlayers } from "../../store/gameSlice";
-import { PlayerSelection } from "../setup/PlayerSelection";
+import { PlayerSelection } from "../player-selection/PlayerSelection";
 import { clearProgress } from "../../utils/localStorage";
 import { Board } from "../board/Board";
 import { Profile } from "../profile/Profile";
