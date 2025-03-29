@@ -10,7 +10,7 @@ interface GameState {
 };
 
 const buildPlayer = (order: number): Player => ({
-  order,
+  order, // todo: rename to index
   name: '',
   imageUrl: '',
   score: {
@@ -35,16 +35,18 @@ export const gameSlice = createSlice({
     incrementTurn: (state) => {
       state.turn = (state.turn + 1) % state.players.length;
     },
+    setPlayerPiece: (state, action: PayloadAction<{ index: number, piece: OmokPieceType }>) => {
+      const { players } = state;
+      const { index, piece } = action.payload;
+      if (!players[index]) {
+        console.error(`No player found at index ${index}`);
+        return;
+      }
+      players[index].piece = piece;
+      state.players = [ ...players ];
+    },
     setTurn: (state, action: PayloadAction<number>) => {
       state.turn = action.payload;
-    },
-    setPlayerOne: (state, action: PayloadAction<OmokPieceType>) => {
-      const { players } = state;
-      state.players = [ { ...players[0], piece: action.payload }, players[1] ];
-    },
-    setPlayerTwo: (state, action: PayloadAction<OmokPieceType>) => {
-      const { players } = state;
-      state.players = [ players[0], { ...players[1], piece: action.payload }, ];
     },
     // setBoardValues: (state, action: PayloadAction<BoardValue[]>) => {
     //   state.values = action.payload;
@@ -55,14 +57,11 @@ export const gameSlice = createSlice({
 export const {
   clearBoard,
   incrementTurn,
-  setPlayerOne,
-  setPlayerTwo,
+  setPlayerPiece,
 } = gameSlice.actions;
 
 // export const selectBoardValues = (state: RootState) => state.game.values;
 export const selectTurn = (state: RootState) => state.game.turn;
 export const selectPlayers = (state: RootState) => state.game.players;
-export const selectPlayerOne = (state: RootState) => state.game.players[0];
-export const selectPlayerTwo = (state: RootState) => state.game.players[1];
 
 export default gameSlice.reducer;

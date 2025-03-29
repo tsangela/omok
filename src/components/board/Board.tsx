@@ -35,6 +35,7 @@ export function Board() {
     // Check is the game is finished
     if (isWinner(i, values, piece)) {
       setWinner(piece);
+      
       return;
     }
 

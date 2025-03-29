@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { clearBoard, selectPlayers, setPlayerOne, setPlayerTwo } from "../../store/gameSlice";
+import { clearBoard, selectPlayers, setPlayerPiece } from "../../store/gameSlice";
 import { classNames } from "../../utils/classNames";
 import { OmokPieceType } from "../../utils/enums";
 import { useAppDispatch } from "../../utils/hooks";
@@ -21,9 +21,9 @@ export function PlayerSelection({ setShowBoard, showBoard }: PlayerSelectionProp
 
   const selectType = (type: OmokPieceType) => {
     if (!players[0].piece) {
-      dispatch(setPlayerOne(type));
+      dispatch(setPlayerPiece({ index: 0, piece: type}));
     } else if (!players[1].piece) {
-      dispatch(setPlayerTwo(type));
+      dispatch(setPlayerPiece({ index: 1, piece: type}));
     }
   }
 
