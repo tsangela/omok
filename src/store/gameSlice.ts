@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from './store'
-import { BoardValue, Players } from '../utils/types'
-import { BOARD_SIZE } from '../utils/constants'
+import { Player, Players } from '../utils/types'
 import { OmokPieceType } from '../utils/enums'
 
 interface GameState {
@@ -10,8 +9,20 @@ interface GameState {
   // values: BoardValue[];
 };
 
+const buildPlayer = (order: number): Player => ({
+  order,
+  name: '',
+  imageUrl: '',
+  score: {
+    points: 0,
+    winCount: 0,
+    lossCount: 0,
+    tieCount: 0,
+  },
+})
+
 const initialState: GameState = {
-  players: [],
+  players: [ buildPlayer(0), buildPlayer(1) ],
   turn: 0,
   // values: Array(BOARD_SIZE).fill(undefined),
 };
@@ -29,13 +40,11 @@ export const gameSlice = createSlice({
     },
     setPlayerOne: (state, action: PayloadAction<OmokPieceType>) => {
       const { players } = state;
-      players[0] = action.payload;
-      state.players = [ ...players ];
+      state.players = [ { ...players[0], piece: action.payload }, players[1] ];
     },
     setPlayerTwo: (state, action: PayloadAction<OmokPieceType>) => {
       const { players } = state;
-      players[1] = action.payload;
-      state.players = [ ...players ];
+      state.players = [ players[0], { ...players[1], piece: action.payload }, ];
     },
     // setBoardValues: (state, action: PayloadAction<BoardValue[]>) => {
     //   state.values = action.payload;

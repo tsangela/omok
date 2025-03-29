@@ -4,7 +4,7 @@ import { classNames } from "../../utils/classNames";
 import { OmokPieceType } from "../../utils/enums";
 import { useAppDispatch } from "../../utils/hooks";
 import Messages from "../../utils/messages";
-import { arePlayersSelected } from "../../utils/validation";
+import { arePlayersSelected as arePiecesSelected } from "../../utils/validation";
 import { OmokPiece } from "../omok-piece/OmokPiece";
 
 import styles from "./PlayerSelection.module.scss";
@@ -19,16 +19,16 @@ export function PlayerSelection({ setShowBoard, showBoard }: PlayerSelectionProp
   const players = useSelector(selectPlayers);
 
   const selectType = (type: OmokPieceType) => {
-    if (!players[0]) {
+    if (!players[0].piece) {
       dispatch(setPlayerOne(type));
-    } else if (!players[1]) {
+    } else if (!players[1].piece) {
       dispatch(setPlayerTwo(type));
     }
   }
 
   const startGame = () => {
     // todo: warning message
-    if (arePlayersSelected(players)) {
+    if (arePiecesSelected(players)) {
       setShowBoard(true);
     }
   }
@@ -40,14 +40,14 @@ export function PlayerSelection({ setShowBoard, showBoard }: PlayerSelectionProp
 
   const buttonProps: ButtonProps = showBoard
     ? { children: Messages.restart, onClick: restartGame }
-    : { children: Messages.start, disabled: !arePlayersSelected(players), onClick: startGame };
+    : { children: Messages.start, disabled: !arePiecesSelected(players), onClick: startGame };
 
   return (
     <div className={styles.selectionContainer}>
       <div className={styles.omokPiecesContainer}>
         {Object.values(OmokPieceType)
         .map((type, i) => {
-            const selected = players.includes(type);
+            const selected = players.some(p => p.piece === type);
             return (
               <button
                 key={`selection_${i}`}

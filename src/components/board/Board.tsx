@@ -23,18 +23,18 @@ export function Board() {
   const canPlacePiece = (i: number) => inBound(i, values) && !values[i] && !winner;
 
   function placePiece(i: number) {
-    const player = players[turn];
-    if (!player || !canPlacePiece(i)) {
+    const { piece } = players[turn];
+    if (!piece || !canPlacePiece(i)) {
       return;
     }
 
     // Place omok piece at the selected tile
-    values[i] = player;
+    values[i] = piece;
     setValues([...values]);
 
     // Check is the game is finished
-    if (isWinner(i, values, player)) {
-      setWinner(player);
+    if (isWinner(i, values, piece)) {
+      setWinner(piece);
       return;
     }
 
@@ -51,7 +51,7 @@ export function Board() {
             index={i}
             canPreview={canPlacePiece(i)}
             placePiece={placePiece}
-            type={players[turn]}
+            type={players[turn].piece}
             value={value}
           />
         ))}

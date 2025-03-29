@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 import { OmokPieces } from "../../api/omok";
 import { getCharacterImage } from "../../api/character";
 import { classNames } from "../../utils/classNames";
-import { OmokPieceType } from "../../utils/enums"
 import Messages from "../../utils/messages";
 
 import styles from "./Profile.module.scss";
 import { useSelector } from "react-redux";
 import { selectTurn } from "../../store/gameSlice";
 import { Spinner } from "../spinner/Spinner";
+import { Player } from "../../utils/types";
 
 type ProfileProps = {
   order: number,
-  type: OmokPieceType,
+  player: Player,
 }
 
 type Stats = {
@@ -72,7 +72,7 @@ function Stat({ id, value } : { id: string; value: number; }) {
   )
 }
 
-export function Profile({ order, type }: ProfileProps) {
+export function Profile({ order, player }: ProfileProps) {
   const turn = useSelector(selectTurn);
   const [characterImageUrl, setCharacterImageUrl] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -87,9 +87,9 @@ export function Profile({ order, type }: ProfileProps) {
   return (
     <div className={classNames(styles.card, turn === order && styles.highlight)}>
       <ProfileImage src={characterImageUrl} loading={loading} />
-      <ProfileName name={OmokPieces[type].name} />
+      <ProfileName name={player.name} />
       <ProfileStats stats={mockStats} />
-      <img src={OmokPieces[type].url} alt="omok piece" className={styles.omokIcon} />
+      {player.piece && <img src={OmokPieces[player.piece].url} alt="omok piece" className={styles.omokIcon} />}
     </div>
   );
 }
