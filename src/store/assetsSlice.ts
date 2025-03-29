@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from './store'
 import { Ear, Face, Hair, Skin } from '../utils/types';
 
@@ -8,7 +8,10 @@ type FetchStatus = {
   isSuccess: boolean;
 }
 
-type Asset<T> = FetchStatus & { data: T };
+type Asset<T> = {
+  data: T,
+  status: FetchStatus,
+};
 
 interface AssetsState {
   ears: Asset<Ear[]>;
@@ -17,18 +20,13 @@ interface AssetsState {
   skins: Asset<Skin[]>;
 };
 
-const setFetchStatus = <T>(asset: Asset<T>, status: FetchStatus) => {
-  const { isError, isFetching, isSuccess } = status;
-  asset.isError = isError;
-  asset.isFetching = isFetching;
-  asset.isSuccess = isSuccess;
-}
-
 const buildResponseState = <T>(data: T): Asset<T> => ({
-  isError: false,
-  isFetching: false,
-  isSuccess: false,
   data,
+  status: {
+    isError: false,
+    isFetching: false,
+    isSuccess: false,
+  },
 });
 
 const initialState: AssetsState = {
@@ -43,32 +41,56 @@ export const assetsSlice = createSlice({
   initialState,
   reducers: {
     setEars: (state, action: PayloadAction<Ear[]>) => {
-      state.ears.data = action.payload;
-      setFetchStatus(state.ears, { isError: false, isFetching: false, isSuccess: true });
+      state.ears = {
+        data: action.payload,
+        status: {
+          isError: false,
+          isFetching: false,
+          isSuccess: true,
+        },
+      };
     },
     setEarsFetchStatus: (state, action: PayloadAction<FetchStatus>) => {
-      setFetchStatus(state.ears, action.payload);
+      state.ears.status = action.payload;
     },
     setFaces: (state, action: PayloadAction<Face[]>) => {
-      state.faces.data = action.payload;
-      setFetchStatus(state.faces, { isError: false, isFetching: false, isSuccess: true });
+      state.faces = {
+        data: action.payload,
+        status: {
+          isError: false,
+          isFetching: false,
+          isSuccess: true,
+        },
+      };
     },
     setFacesFetchStatus: (state, action: PayloadAction<FetchStatus>) => {
-      setFetchStatus(state.faces, action.payload);
+      state.faces.status = action.payload;
     },
     setHairs: (state, action: PayloadAction<Hair[]>) => {
-      state.hairs.data = action.payload;
-      setFetchStatus(state.hairs, { isError: false, isFetching: false, isSuccess: true });
+      state.hairs = {
+        data: action.payload,
+        status: {
+          isError: false,
+          isFetching: false,
+          isSuccess: true,
+        },
+      };
     },
     setHairsFetchStatus: (state, action: PayloadAction<FetchStatus>) => {
-      setFetchStatus(state.hairs, action.payload);
+      state.hairs.status = action.payload;
     },
     setSkins: (state, action: PayloadAction<Skin[]>) => {
-      state.skins.data = action.payload;
-      setFetchStatus(state.skins, { isError: false, isFetching: false, isSuccess: true });
+      state.skins = {
+        data: action.payload,
+        status: {
+          isError: false,
+          isFetching: false,
+          isSuccess: true,
+        },
+      };
     },
     setSkinsFetchStatus: (state, action: PayloadAction<FetchStatus>) => {
-      setFetchStatus(state.skins, action.payload);
+      state.skins.status = action.payload;
     },
   },
 });
@@ -85,8 +107,17 @@ export const {
 } = assetsSlice.actions;
 
 export const selectEars = (state: RootState) => state.assets.ears.data;
+export const selectEarsFetchStatus = (state: RootState) => state.assets.ears.status;
+
 export const selectFaces = (state: RootState) => state.assets.faces.data;
+export const selectFacesFetchStatus = (state: RootState) => state.assets.faces.status;
+export const selectFaceIds = createSelector([selectFaces], faces => faces.map(face => face.faceId));
+
 export const selectHairs = (state: RootState) => state.assets.hairs.data;
+export const selectHairsFetchStatus = (state: RootState) => state.assets.hairs.status;
+export const selectHairIds = createSelector([selectHairs], hairs => hairs.map(hair => hair.hairId));
+
 export const selectSkins = (state: RootState) => state.assets.skins.data;
+export const selectSkinsFetchStatus = (state: RootState) => state.assets.skins.status;
 
 export default assetsSlice.reducer;

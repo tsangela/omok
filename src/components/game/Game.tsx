@@ -11,38 +11,6 @@ import { Profile } from "../profile/Profile";
 import styles from "./Game.module.scss";
 import { AssetType } from "../../utils/enums";
 
-export default function Game() {
-  const dispatch = useAppDispatch();
-  const players = useSelector(selectPlayers);
-  const [showBoard, setShowBoard] = useState(false);
-
-  async function fetchAsset(type: AssetType) {
-    const { get, set, setStatus } = assetOperations[type];
-    dispatch(setStatus({ isError: false, isFetching: true, isSuccess: false }));
-    get()
-      .then((data: any) => dispatch(set(data)))
-      .catch(() => dispatch(setStatus({ isError: true, isFetching: false, isSuccess: false })));
-  };
-
-  useEffect(() => {
-    Object.values(AssetType).forEach(type => fetchAsset(type as AssetType));
-  }, []);
-
-  return (
-    <div className={styles.game}>
-      {/* todo: uncomment? */}
-      {/* {!showBoard && <PlayerSelection showBoard={showBoard} setShowBoard={setShowBoard} />} */}
-      <PlayerSelection setShowBoard={setShowBoard} showBoard={showBoard} />
-      <div className={styles.profilesContainer}>
-        {players.filter(player => !!player.piece).map((player, i) => (
-          <Profile key={`player_${i}`} index={i} player={player} />
-        ))}
-      </div>
-      {showBoard && <Board />}
-    </div>
-  )
-}
-
 const assetOperations = {
   [AssetType.Ear]: {
     get: getEars,
@@ -64,4 +32,36 @@ const assetOperations = {
     set: setSkins,
     setStatus: setSkinsFetchStatus,
   },
+}
+
+export default function Game() {
+  const dispatch = useAppDispatch();
+  const players = useSelector(selectPlayers);
+  const [showBoard, setShowBoard] = useState(false);
+
+  async function fetchAsset(type: AssetType) {
+    const { get, set, setStatus } = assetOperations[type];
+    dispatch(setStatus({ isError: false, isFetching: true, isSuccess: false }));
+    get()
+      .then((data: any) => dispatch(set(data)))
+      .catch(() => dispatch(setStatus({ isError: true, isFetching: false, isSuccess: false })));
+  };
+
+  useEffect(() => {
+    [AssetType.Ear, AssetType.Face, AssetType.Hair, AssetType.Skin].forEach(type => fetchAsset(type));
+  }, []);
+
+  return (
+    <div className={styles.game}>
+      {/* todo: uncomment? */}
+      {/* {!showBoard && <PlayerSelection showBoard={showBoard} setShowBoard={setShowBoard} />} */}
+      <PlayerSelection setShowBoard={setShowBoard} showBoard={showBoard} />
+      <div className={styles.profilesContainer}>
+        {players.filter(player => !!player.piece).map((player, i) => (
+          <Profile key={`player_${i}`} index={i} player={player} />
+        ))}
+      </div>
+      {showBoard && <Board />}
+    </div>
+  )
 }

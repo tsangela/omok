@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { OmokPieces } from "../../api/omok";
-import { getCharacterImage } from "../../api/character";
+import { getCharacterImage, getRandomCharacterImage } from "../../api/character";
 import { classNames } from "../../utils/classNames";
 import Messages from "../../utils/messages";
 
@@ -10,6 +10,7 @@ import { selectTurn } from "../../store/gameSlice";
 import { Spinner } from "../spinner/Spinner";
 import { Player, Score } from "../../utils/types";
 import { ScoreType } from "../../utils/enums";
+import { selectEars, selectFaceIds, selectHairIds, selectSkins } from "../../store/assetsSlice";
 
 type ProfileProps = {
   index: number,
@@ -18,6 +19,11 @@ type ProfileProps = {
 
 export function Profile({ index, player }: ProfileProps) {
   const turn = useSelector(selectTurn);
+  const ears = useSelector(selectEars);
+  const faces = useSelector(selectFaceIds);
+  const hairs = useSelector(selectHairIds);
+  const skins = useSelector(selectSkins);
+
   const [characterImageUrl, setCharacterImageUrl] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -25,7 +31,10 @@ export function Profile({ index, player }: ProfileProps) {
 
   useEffect(() => {
     setLoading(true);
-    getCharacterImage('tiginis')
+    // getCharacterImage('tiginis')
+    //   .then(setCharacterImageUrl)
+    //   .finally(() => setLoading(false));
+    getRandomCharacterImage(ears, faces, hairs, skins)
       .then(setCharacterImageUrl)
       .finally(() => setLoading(false));
   }, []);

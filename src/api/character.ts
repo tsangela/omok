@@ -1,7 +1,7 @@
-import skins from "./data/skins.json";
-import ears from "./data/ears.json";
+import skinsData from "./data/skins.json";
+import earsData from "./data/ears.json";
 import { buildRequestUrl, Endpoint, Method, random } from "./apiUtils";
-import { Face, Hair } from "../utils/types";
+import { Ear, Face, Hair, Id, Skin } from "../utils/types";
 import { PLACEHOLDER_CHARACTER_IMAGE } from "../utils/constants";
 
 type Response<T> = { result: T };
@@ -19,9 +19,9 @@ type CharacterRequest = {
   effectFrame: number,
 };
 
-export const getEars = async () => Promise.resolve(ears);
+export const getEars = async () => Promise.resolve(earsData);
 
-export const getSkins = async () => Promise.resolve(skins);
+export const getSkins = async () => Promise.resolve(skinsData);
 
 // Retrieves the list of character face numerical ids
 export async function getFaces() {
@@ -47,28 +47,38 @@ export async function getHairs() {
 
 // Creates a customized character image
 export async function makeCustomCharacterImage(request: CharacterRequest) {
-  const response = await fetch(`${buildRequestUrl(Endpoint.Character)}/render`, {
-    method: Method.Post,
-    body: JSON.stringify(request),
-    headers: {
-      "Content-Type": "application/json"
-    },
-  });
-  if (!response.ok) {
-    throw new Error(`Failed to fetch character: ${response.status}`);
+  try {
+    const response = await fetch(`${buildRequestUrl(Endpoint.Character)}/render`, {
+      method: Method.Post,
+      body: JSON.stringify(request),
+      headers: {
+        "Content-Type": "application/json"
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to make custom character: ${response.status}`);
+    }
+    const blob = await response.blob();
+    return URL.createObjectURL(blob);
+  } catch (error) {
+    console.error(error);
+    return PLACEHOLDER_CHARACTER_IMAGE;
   }
-  const blob = await response.blob();
-  return URL.createObjectURL(blob);
 }
 
-export async function getRandomCharacterImage() {
+export async function getRandomCharacterImage(
+  ears: Ear[],
+  faces: Id[],
+  hairs: Id[],
+  skins: Skin[],
+) {
   const request: CharacterRequest = {
     skin: random(skins),
-    faceId: 20000,
-    hairId: 30000,
+    faceId: random(faces),
+    hairId: random(hairs),
     pose: "standingOneHanded",
     poseFrame: 1,
-    faceEmote: "smile",
+    faceEmote: "default",
     faceFrame: 0,
     ears: random(ears),
     itemIds: [
