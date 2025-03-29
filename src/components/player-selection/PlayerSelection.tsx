@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { useSelector } from "react-redux";
-import { clearBoard, selectPlayers, setPlayerPiece } from "../../store/gameSlice";
+import { clearBoard, selectPlayers, setPlayer, setPlayerPiece } from "../../store/gameSlice";
 import { classNames } from "../../utils/classNames";
 import { OmokPieceType } from "../../utils/enums";
 import { useAppDispatch } from "../../utils/hooks";
@@ -8,6 +9,8 @@ import { arePiecesSelected } from "../../utils/validation";
 import { OmokPiece } from "../omok-piece/OmokPiece";
 
 import styles from "./PlayerSelection.module.scss";
+import { loadPlayerProgress } from "../../utils/localStorage";
+import { OmokPieces } from "../../api/omok";
 
 type PlayerSelectionProps = {
   setShowBoard: (show: boolean) => void;
@@ -17,13 +20,21 @@ type PlayerSelectionProps = {
 export function PlayerSelection({ setShowBoard, showBoard }: PlayerSelectionProps) {
   const dispatch = useAppDispatch();
   const players = useSelector(selectPlayers);
+
   const doneSelection = arePiecesSelected(players);
 
   const selectType = (type: OmokPieceType) => {
+    const player = loadPlayerProgress(OmokPieces[type].name);
     if (!players[0].piece) {
-      dispatch(setPlayerPiece({ index: 0, piece: type}));
+      dispatch(player
+        ? setPlayer({ index: 0, player })
+        : setPlayerPiece({ index: 0, piece: type})
+      );
     } else if (!players[1].piece) {
-      dispatch(setPlayerPiece({ index: 1, piece: type}));
+      dispatch(player
+        ? setPlayer({ index: 1, player })
+        : setPlayerPiece({ index: 1, piece: type})
+      );
     }
   }
 

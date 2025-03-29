@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from './store'
 import { Player, Players, Score } from '../utils/types'
 import { OmokPieceType, ScoreType } from '../utils/enums'
@@ -7,7 +7,7 @@ import { nextTurn } from '../utils/validation';
 
 interface GameState {
   players: Players;
-  turn: number;
+  turn: number; // todo: rename to turnIndex?
 };
 
 const buildPlayer = (index: number): Player => ({
@@ -39,6 +39,22 @@ export const gameSlice = createSlice({
     incrementTurn: (state) => {
       state.turn = nextTurn(state.turn);
     },
+    setPlayer: (state, action: PayloadAction<{ index: number, player: Player }>) => {
+      const { players } = state;
+      const { index, player } = action.payload;
+      players[index] = player;
+      state.players = players;
+    },
+    setPlayerImageUrl: (state, action: PayloadAction<{ index: number, imageUrl: string }>) => {
+      const { players } = state;
+      const { index, imageUrl } = action.payload;
+      if (!players[index]) {
+        console.error(`No player found at index ${index}`);
+        return;
+      }
+      players[index].imageUrl = imageUrl;
+      state.players = players;
+    },
     setPlayerPiece: (state, action: PayloadAction<{ index: number, piece: OmokPieceType }>) => {
       const { players } = state;
       const { index, piece } = action.payload;
@@ -67,12 +83,14 @@ export const {
   clearBoard,
   clearGame,
   incrementTurn,
+  setPlayer,
+  setPlayerImageUrl,
   setPlayerPiece,
   setPlayerScore,
 } = gameSlice.actions;
 
-// export const selectBoardValues = (state: RootState) => state.game.values;
 export const selectTurn = (state: RootState) => state.game.turn;
 export const selectPlayers = (state: RootState) => state.game.players;
+export const selectCurrentPlayer = createSelector([selectPlayers, selectTurn], (players, index) => players[index]);
 
 export default gameSlice.reducer;

@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
-import { OmokPieces } from "../../api/omok";
-import { getCharacterImage, getRandomCharacterImage } from "../../api/character";
+import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch } from "../../utils/hooks";
+import { selectTurn, setPlayerImageUrl } from "../../store/gameSlice";
+import { selectEars, selectFaceIds, selectHairIds, selectSkins } from "../../store/assetsSlice";
 import { classNames } from "../../utils/classNames";
+import { ScoreType } from "../../utils/enums";
 import Messages from "../../utils/messages";
+import { Player, Score } from "../../utils/types";
+import { getCharacterImage, getRandomCharacterImage } from "../../api/character";
+import { OmokPieces } from "../../api/omok";
+import { Spinner } from "../spinner/Spinner";
 
 import styles from "./Profile.module.scss";
-import { useSelector } from "react-redux";
-import { selectTurn } from "../../store/gameSlice";
-import { Spinner } from "../spinner/Spinner";
-import { Player, Score } from "../../utils/types";
-import { ScoreType } from "../../utils/enums";
-import { selectEars, selectFaceIds, selectHairIds, selectSkins } from "../../store/assetsSlice";
+import { isNexonHostedImageUrl } from "../../utils/validation";
 
 type ProfileProps = {
   index: number,
@@ -18,25 +20,31 @@ type ProfileProps = {
 }
 
 export function Profile({ index, player }: ProfileProps) {
+  const dispatch = useAppDispatch();
   const turn = useSelector(selectTurn);
   const ears = useSelector(selectEars);
   const faces = useSelector(selectFaceIds);
   const hairs = useSelector(selectHairIds);
   const skins = useSelector(selectSkins);
 
-  const [characterImageUrl, setCharacterImageUrl] = useState<string>('');
+  const [characterImageUrl, setCharacterImageUrl] = useState<string>(player.imageUrl);
   const [loading, setLoading] = useState<boolean>(false);
 
   const { name, score } = player;
 
   useEffect(() => {
-    setLoading(true);
-    // getCharacterImage('tiginis')
-    //   .then(setCharacterImageUrl)
-    //   .finally(() => setLoading(false));
-    getRandomCharacterImage(ears, faces, hairs, skins)
-      .then(setCharacterImageUrl)
-      .finally(() => setLoading(false));
+    if (!isNexonHostedImageUrl(player.imageUrl)) {
+      setLoading(true);
+      // getCharacterImage('tiginis')
+      //   .then(setCharacterImageUrl)
+      //   .finally(() => setLoading(false));
+      getRandomCharacterImage(ears, faces, hairs, skins)
+        .then(url => {
+          dispatch(setPlayerImageUrl({ index, imageUrl: url }));
+          setCharacterImageUrl(url);
+        })
+        .finally(() => setLoading(false));
+    }
   }, []);
 
   return (
