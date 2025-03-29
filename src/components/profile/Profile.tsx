@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { OmokPieces } from "../../api/omok";
-import { getRandomCharacterImage } from "../../api/character";
+import { getCharacterImage } from "../../api/character";
 import { classNames } from "../../utils/classNames";
 import { OmokPieceType } from "../../utils/enums"
 import Messages from "../../utils/messages";
@@ -8,6 +8,7 @@ import Messages from "../../utils/messages";
 import styles from "./Profile.module.scss";
 import { useSelector } from "react-redux";
 import { selectTurn } from "../../store/gameSlice";
+import { Spinner } from "../spinner/Spinner";
 
 type ProfileProps = {
   order: number,
@@ -28,10 +29,12 @@ const mockStats: Stats = {
   tied: 4,
 }
 
-function ProfileImage({ src }: { src?: string; }) {
+function ProfileImage({ src, loading }: { src?: string; loading: boolean; }) {
   return (
     <div className={styles.character}>
-      {src && <img src={src} alt="character" />}
+      {loading 
+        ? <Spinner />
+        : src && <img src={src} alt="character" />}
     </div>
   )
 }
@@ -71,15 +74,19 @@ function Stat({ id, value } : { id: string; value: number; }) {
 
 export function Profile({ order, type }: ProfileProps) {
   const turn = useSelector(selectTurn);
-  const [character, setCharacter] = useState<string | undefined>(undefined);
+  const [characterImageUrl, setCharacterImageUrl] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    getRandomCharacterImage().then(setCharacter);
+    setLoading(true);
+    getCharacterImage('tiginis')
+      .then(setCharacterImageUrl)
+      .finally(() => setLoading(false));
   }, []);
 
   return (
     <div className={classNames(styles.card, turn === order && styles.highlight)}>
-      <ProfileImage src={character} />
+      <ProfileImage src={characterImageUrl} loading={loading} />
       <ProfileName name={OmokPieces[type].name} />
       <ProfileStats stats={mockStats} />
       <img src={OmokPieces[type].url} alt="omok piece" className={styles.omokIcon} />

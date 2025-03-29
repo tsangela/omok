@@ -10,15 +10,20 @@ export type Item = {
 
 export type BoardValue = OmokPieceType | undefined;
 
+export type Player = {
+  order: number;
+  piece: OmokPieceType;
+}
+
 export type Players = [p1?: OmokPieceType, p2?: OmokPieceType];
 
 export type Face = {
-  faceId: number,
+  faceId: Id,
   name: string,
 };
 
 export type Hair = {
-  hairId: number,
+  hairId: Id,
   name: string,
 };
 

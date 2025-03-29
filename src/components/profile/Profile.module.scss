@@ -1,6 +1,7 @@
 @use '../../scss/base.scss' as base;
 
-$width: 120px;
+$card-width: 120px;
+$character-image-height: 96px;
 $padding: base.$spacing-2;
 $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
 
@@ -8,19 +9,20 @@ $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
   position: relative;
   display: grid;
   grid-gap: base.$spacing-2;
-  width: $width;
+  width: $card-width;
 }
 
 .character {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: $padding;
 
   background: base.$color-card-background;
   -webkit-box-shadow: inset $box-shadow;
   -moz-box-shadow: inset $box-shadow;
   box-shadow: $box-shadow;
+
+  height: $character-image-height;
 }
 
 .highlight {

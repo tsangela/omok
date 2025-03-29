@@ -7,7 +7,8 @@ const profileCard = {
 };
 
 const buttons = {
-  start: "Start!"
+  restart: "Restart",
+  start: "Start"
 };
 
 const Messages = {

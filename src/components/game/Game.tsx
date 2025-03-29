@@ -13,8 +13,9 @@ export default function Game() {
 
   return (
     <div className={styles.game}>
-      {/* {!showBoard && <PlayerSelection setShowBoard={setShowBoard} />} */}
-      <PlayerSelection setShowBoard={setShowBoard} />
+      {/* todo: uncomment? */}
+      {/* {!showBoard && <PlayerSelection showBoard={showBoard} setShowBoard={setShowBoard} />} */}
+      <PlayerSelection setShowBoard={setShowBoard} showBoard={showBoard} />
       <div className={styles.profilesContainer}>
         {players.filter(player => !!player).map((player, i) => (
           <Profile key={`player_${i}`} order={i} type={player} />

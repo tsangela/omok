@@ -1,6 +1,6 @@
 import { OmokPieceType } from "../utils/enums";
 import { Id, Item } from "../utils/types";
-import { buildRequestUrl, Endpoints, fetchImage } from "./apiUtils";
+import { buildRequestUrl, Endpoint, fetchImage } from "./apiUtils";
 
 export const OmokPieces: { [key in OmokPieceType]: Item } = {
   [OmokPieceType.Slime]: {
@@ -45,7 +45,7 @@ export const OmokPieces: { [key in OmokPieceType]: Item } = {
   },
 }
 
-const buildItemUrl = (id: Id) => `${buildRequestUrl(Endpoints.Item)}/${id}/iconRaw`;
+const buildItemUrl = (id: Id) => `${buildRequestUrl(Endpoint.Item)}/${id}/iconRaw`;
 
 export async function getOmokPieces() {
   return Promise.all(Object.values(OmokPieces).map(({ id }) => fetchImage(buildItemUrl(id))));

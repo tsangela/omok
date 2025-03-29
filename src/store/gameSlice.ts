@@ -7,22 +7,20 @@ import { OmokPieceType } from '../utils/enums'
 interface GameState {
   players: Players;
   turn: number;
-  values: BoardValue[];
+  // values: BoardValue[];
 };
 
 const initialState: GameState = {
   players: [],
   turn: 0,
-  values: Array(BOARD_SIZE).fill(undefined),
+  // values: Array(BOARD_SIZE).fill(undefined),
 };
 
 export const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
-    clearBoard: (state) => {
-      state = initialState;
-    },
+    clearBoard: () => initialState,
     incrementTurn: (state) => {
       state.turn = (state.turn + 1) % state.players.length;
     },
@@ -39,19 +37,20 @@ export const gameSlice = createSlice({
       players[1] = action.payload;
       state.players = [ ...players ];
     },
-    setValues: (state, action: PayloadAction<BoardValue[]>) => {
-      state.values = action.payload;
-    },
+    // setBoardValues: (state, action: PayloadAction<BoardValue[]>) => {
+    //   state.values = action.payload;
+    // },
   },
 });
 
 export const {
+  clearBoard,
   incrementTurn,
   setPlayerOne,
   setPlayerTwo,
 } = gameSlice.actions;
 
-export const selectBoardValues = (state: RootState) => state.game.values;
+// export const selectBoardValues = (state: RootState) => state.game.values;
 export const selectTurn = (state: RootState) => state.game.turn;
 export const selectPlayers = (state: RootState) => state.game.players;
 export const selectPlayerOne = (state: RootState) => state.game.players[0];

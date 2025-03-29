@@ -1,23 +1,20 @@
 import { useSelector } from "react-redux";
-import { selectPlayerOne, selectPlayers, selectPlayerTwo, setPlayerOne, setPlayerTwo } from "../../store/gameSlice";
+import { clearBoard, selectPlayers, setPlayerOne, setPlayerTwo } from "../../store/gameSlice";
 import { classNames } from "../../utils/classNames";
 import { OmokPieceType } from "../../utils/enums";
 import { useAppDispatch } from "../../utils/hooks";
 import Messages from "../../utils/messages";
-import { Players } from "../../utils/types";
+import { arePlayersSelected } from "../../utils/validation";
 import { OmokPiece } from "../omok-piece/OmokPiece";
 
 import styles from "./PlayerSelection.module.scss";
-import { arePlayersSelected } from "../../utils/validation";
 
 type PlayerSelectionProps = {
   setShowBoard: (show: boolean) => void;
-  // readonly players: Players;
-  // readonly playerOne: OmokPieceType | undefined;
-  // readonly playerTwo: OmokPieceType | undefined;
+  showBoard: boolean;
 }
 
-export function PlayerSelection({ setShowBoard }: PlayerSelectionProps) {
+export function PlayerSelection({ setShowBoard, showBoard }: PlayerSelectionProps) {
   const dispatch = useAppDispatch();
   const players = useSelector(selectPlayers);
 
@@ -35,6 +32,15 @@ export function PlayerSelection({ setShowBoard }: PlayerSelectionProps) {
       setShowBoard(true);
     }
   }
+
+  const restartGame = () => {
+    dispatch(clearBoard());
+    setShowBoard(false);
+  }
+
+  const buttonProps: ButtonProps = showBoard
+    ? { children: Messages.restart, onClick: restartGame }
+    : { children: Messages.start, disabled: !arePlayersSelected(players), onClick: startGame };
 
   return (
     <div className={styles.selectionContainer}>
@@ -55,14 +61,26 @@ export function PlayerSelection({ setShowBoard }: PlayerSelectionProps) {
             )
         })}
       </div>
-      <button
-        className={styles.startButton}
-        disabled={!arePlayersSelected(players)}
-        aria-disabled={!arePlayersSelected(players)}
-        onClick={startGame}
-      >
-        {Messages.start}
-      </button>
+      <Button {...buttonProps} />
     </div>
   );
+}
+
+type ButtonProps = {
+  children: string | React.ReactElement;
+  disabled?: boolean;
+  onClick: () => void;
+}
+
+function Button({ children, disabled, onClick } : ButtonProps) {
+  return (
+    <button
+      className={styles.startButton}
+      disabled={disabled}
+      aria-disabled={disabled}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  )
 }

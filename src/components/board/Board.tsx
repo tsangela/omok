@@ -4,17 +4,12 @@ import { incrementTurn, selectPlayers, selectTurn } from "../../store/gameSlice"
 import { BOARD_SIZE } from "../../utils/constants";
 import { OmokPieceType } from "../../utils/enums";
 import { useAppDispatch } from "../../utils/hooks";
-import { BoardValue, Players } from "../../utils/types";
-import { inBound, arePlayersSelected } from "../../utils/validation";
+import { BoardValue } from "../../utils/types";
+import { inBound } from "../../utils/validation";
 import { isWinner } from "../../utils/winCalculator";
 import { BoardTile, PreviewTile } from "../tile/Tile";
-import { Profile } from "../profile/Profile";
 
 import styles from "./Board.module.scss";
-
-type BoardProps = {
-  readonly players: [OmokPieceType, OmokPieceType];
-};
 
 export function Board() {
   const dispatch = useAppDispatch();
@@ -28,12 +23,12 @@ export function Board() {
   const canPlacePiece = (i: number) => inBound(i, values) && !values[i] && !winner;
 
   function placePiece(i: number) {
-    if (!canPlacePiece(i)) {
+    const player = players[turn];
+    if (!player || !canPlacePiece(i)) {
       return;
     }
 
     // Place omok piece at the selected tile
-    const player = players[turn];
     values[i] = player;
     setValues([...values]);
 

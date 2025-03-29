@@ -1,15 +1,9 @@
 import skins from "./data/skins.json";
 import ears from "./data/ears.json";
-import { buildRequestUrl, Endpoints, Method, random } from "./apiUtils";
+import { buildRequestUrl, Endpoint, Method, random } from "./apiUtils";
 import { Face, Hair } from "../utils/types";
 
-type FacesResponse = {
-  result: Face[]
-};
-
-type HairsResponse = {
-  result: Hair[]
-};
+type Response<T> = { result: T };
 
 type CharacterRequest = {
   skin: string,
@@ -24,37 +18,38 @@ type CharacterRequest = {
   effectFrame: number,
 };
 
+// todo: use memo?
 export const getEars = () => ears;
 
 export const getSkins = () => skins;
 
 // Retrieves the list of character face numerical ids
 async function getFaces() {
-  const response = await fetch(buildRequestUrl(Endpoints.Faces));
+  const response = await fetch(buildRequestUrl(Endpoint.Faces));
   if (!response.ok) {
     throw new Error(`Failed to fetch faces: ${response.status}`);
   }
-  const data: FacesResponse = await response.json();
+  const data: Response<Face[]> = await response.json();
   return data?.result?.map(face => face.faceId);
 }
 // Retrieves the list of character hair numerical ids
 async function getHairs() {
-  const response = await fetch(buildRequestUrl(Endpoints.Hairs));
+  const response = await fetch(buildRequestUrl(Endpoint.Hairs));
   if (!response.ok) {
     throw new Error(`Failed to fetch faces: ${response.status}`);
   }
-  const data: HairsResponse = await response.json();
+  const data: Response<Hair[]> = await response.json();
   return data?.result?.map(hair => hair.hairId);
 }
 
 // Creates a customized character image
-export async function getCharacterImage(request: CharacterRequest) {
-  const response = await fetch(`${buildRequestUrl(Endpoints.Character)}/render`, {
+export async function makeCustomCharacterImage(request: CharacterRequest) {
+  const response = await fetch(`${buildRequestUrl(Endpoint.Character)}/render`, {
     method: Method.Post,
     body: JSON.stringify(request),
     headers: {
       "Content-Type": "application/json"
-    }
+    },
   });
   if (!response.ok) {
     throw new Error(`Failed to fetch character: ${response.status}`);
@@ -64,8 +59,6 @@ export async function getCharacterImage(request: CharacterRequest) {
 }
 
 export async function getRandomCharacterImage() {
-  const mockUrl = "https://i.mapleranks.com/u/NILBICJDEEPALBMDKBIMKNNAJLCGDKKDCELGIEEIMFNFPDDLCLJKAKADFHNEAIPABHAPMCKGCDHHABFKJDMOBPPNNLJCELKIPPIHGPMAEIHEFNMEDBDLDMIHIPJHHEPLLNPJADDPLAINPFHAJDIDEKEJJOMGJAKAMDBBEPDFCPCPECFJGNAFONJAKIDKPAIMNFLMCPDEHDLKGBMHIGIHBDBKGHIKPBOIKHPIEEAEIAINPBNPLEMMDPEOHACNCICP.png";
-  return mockUrl;
   const request: CharacterRequest = {
     skin: random(skins),
     faceId: 20000,
@@ -81,5 +74,30 @@ export async function getRandomCharacterImage() {
     ],
     effectFrame: 0,
   }
-  return getCharacterImage(request)
+  return makeCustomCharacterImage(request);
+}
+
+type CharacterRankResponse = {
+  characterName: string,
+  characterImgURL: string,
+}
+
+export async function getCharacterImage(name: string) {
+  if (!name) {
+    throw new Error(`Cannot search for character '${name}'`);
+  }
+  const requestUrl = `https://www.nexon.com/api/maplestory/no-auth/ranking/v2/na?type=overall&id=weekly&character_name=${name}`
+  try {
+    const response = await fetch(requestUrl, {
+      method: Method.Get,
+      headers: {
+        "Access-Control-Allow-Origin": "*"
+      },
+    });
+    const data: CharacterRankResponse = await response.json();
+    return data.characterImgURL;
+  } catch (error) {
+    console.error(`Failed to fetch character image for ${name}`);
+    return "https://msavatar1.nexon.net/Character/NILBICJDEEPALBMDKBIMKNNAJLCGDKKDCELGIEEIMFNFPDDLCLJKAKADFHNEAIPABHAPMCKGCDHHABFKJDMOBPPNNLJCELKIPPIHGPMAEIHEFNMEDBDLDMIHIPJHHEPLLNPJADDPLAINPFHAJDIDEKEJJOMGJAKAMDBBEPDFCPCPECFJGNAFONJAKIDKPAIMNFLMCPDEHDLKGBMHIGIHBDBKGHIKPBOIKHPIEEAEIAINPBNPLEMMDPEOHACNCICP.png";
+  }
 }

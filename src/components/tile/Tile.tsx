@@ -25,7 +25,7 @@ interface PreviewTileProps extends TileProps {
   index: number;
   canPreview: boolean;
   placePiece: (i: number) => void;
-  type: OmokPieceType;
+  type?: OmokPieceType;
 }
 
 export function PreviewTile({ index, canPreview, placePiece, type }: PreviewTileProps) {
@@ -49,7 +49,7 @@ export function PreviewTile({ index, canPreview, placePiece, type }: PreviewTile
       onBlur={onMouseLeave}
       onClick={onClick}
     >
-      {show ? <OmokPiece preview type={type} /> : null}
+      {show && type ? <OmokPiece preview type={type} /> : null}
     </button>
   );
 }

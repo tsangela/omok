@@ -1,18 +1,18 @@
-export const MAPLESTORY_API_HOST = "https://api.maplestory.net";
+export const MAPLESTORY_API_BASE_URL = "https://api.maplestory.net";
 
 export enum Method {
   Get = "GET",
   Post = "POST",
 }
 
-export enum Endpoints {
+export enum Endpoint {
   Character = "character",
   Faces = "faces",
   Hairs = "hairs",
   Item = "item",
 }
 
-export const buildRequestUrl = (endpoint: string) => `${MAPLESTORY_API_HOST}/${endpoint}`;
+export const buildRequestUrl = (endpoint: string) => `${MAPLESTORY_API_BASE_URL}/${endpoint}`;
 
 export async function fetchImage(url: string) {
   const response = await fetch(url);
