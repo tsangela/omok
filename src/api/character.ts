@@ -2,6 +2,7 @@ import skins from "./data/skins.json";
 import ears from "./data/ears.json";
 import { buildRequestUrl, Endpoint, Method, random } from "./apiUtils";
 import { Face, Hair } from "../utils/types";
+import { PLACEHOLDER_CHARACTER_IMAGE } from "../utils/constants";
 
 type Response<T> = { result: T };
 
@@ -18,28 +19,30 @@ type CharacterRequest = {
   effectFrame: number,
 };
 
-// todo: use memo?
-export const getEars = () => ears;
+export const getEars = async () => Promise.resolve(ears);
 
-export const getSkins = () => skins;
+export const getSkins = async () => Promise.resolve(skins);
 
 // Retrieves the list of character face numerical ids
-async function getFaces() {
+export async function getFaces() {
   const response = await fetch(buildRequestUrl(Endpoint.Faces));
   if (!response.ok) {
     throw new Error(`Failed to fetch faces: ${response.status}`);
   }
   const data: Response<Face[]> = await response.json();
-  return data?.result?.map(face => face.faceId);
+  // return data?.result?.map(face => face.faceId);
+  return data?.result ?? [];
 }
+
 // Retrieves the list of character hair numerical ids
-async function getHairs() {
+export async function getHairs() {
   const response = await fetch(buildRequestUrl(Endpoint.Hairs));
   if (!response.ok) {
     throw new Error(`Failed to fetch faces: ${response.status}`);
   }
   const data: Response<Hair[]> = await response.json();
-  return data?.result?.map(hair => hair.hairId);
+  // return data?.result?.map(hair => hair.hairId);
+  return data?.result ?? [];
 }
 
 // Creates a customized character image
@@ -88,16 +91,14 @@ export async function getCharacterImage(name: string) {
   }
   const requestUrl = `https://www.nexon.com/api/maplestory/no-auth/ranking/v2/na?type=overall&id=weekly&character_name=${name}`
   try {
-    const response = await fetch(requestUrl, {
-      method: Method.Get,
-      headers: {
-        "Access-Control-Allow-Origin": "*"
-      },
-    });
+    const response = await fetch(requestUrl);
+    if (!response.ok) {
+      throw new Error("Request response not ok");
+    }
     const data: CharacterRankResponse = await response.json();
     return data.characterImgURL;
   } catch (error) {
-    console.error(`Failed to fetch character image for ${name}`);
-    return "https://msavatar1.nexon.net/Character/NILBICJDEEPALBMDKBIMKNNAJLCGDKKDCELGIEEIMFNFPDDLCLJKAKADFHNEAIPABHAPMCKGCDHHABFKJDMOBPPNNLJCELKIPPIHGPMAEIHEFNMEDBDLDMIHIPJHHEPLLNPJADDPLAINPFHAJDIDEKEJJOMGJAKAMDBBEPDFCPCPECFJGNAFONJAKIDKPAIMNFLMCPDEHDLKGBMHIGIHBDBKGHIKPBOIKHPIEEAEIAINPBNPLEMMDPEOHACNCICP.png";
+    console.error(`Failed to fetch character image for ${name}.`, error);
+    return PLACEHOLDER_CHARACTER_IMAGE;
   }
 }

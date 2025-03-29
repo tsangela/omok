@@ -16,6 +16,13 @@ export enum ScoreType {
   Tie = "tie",
 }
 
+export enum AssetType {
+  Ear,
+  Face,
+  Hair,
+  Skin,
+}
+
 export enum PointMultiplier {
   Win = 10,
   Loss = -10,

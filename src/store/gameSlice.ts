@@ -33,7 +33,7 @@ export const gameSlice = createSlice({
   reducers: {
     clearBoard: (state) => ({
       ...initialState,
-      players: state.players,
+      players: state.players, // Keep player progress
     }),
     clearGame: () => initialState,
     incrementTurn: (state) => {
@@ -48,7 +48,7 @@ export const gameSlice = createSlice({
       }
       players[index].piece = piece;
       players[index].name = OmokPieces[piece].name; // todo: temporary
-      state.players = [ ...players ];
+      state.players = players;
     },
     setPlayerScore: (state, action: PayloadAction<{ index: number, score: Score }>) => {
       const { players } = state;
@@ -58,7 +58,7 @@ export const gameSlice = createSlice({
         return;
       }
       players[index].score = score;
-      state.players = [ ...players ];
+      state.players = players;
     },
   },
 });
