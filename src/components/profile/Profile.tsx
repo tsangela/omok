@@ -8,25 +8,35 @@ import styles from "./Profile.module.scss";
 import { useSelector } from "react-redux";
 import { selectTurn } from "../../store/gameSlice";
 import { Spinner } from "../spinner/Spinner";
-import { Player } from "../../utils/types";
+import { Player, Score } from "../../utils/types";
 
 type ProfileProps = {
   order: number,
   player: Player,
 }
 
-type Stats = {
-  points: number,
-  won: number,
-  loss: number,
-  tied: number,
-}
+export function Profile({ order, player }: ProfileProps) {
+  const turn = useSelector(selectTurn);
+  const [characterImageUrl, setCharacterImageUrl] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
-const mockStats: Stats = {
-  points: 1234,
-  won: 16,
-  loss: 27,
-  tied: 4,
+  const { name, score } = player;
+
+  useEffect(() => {
+    setLoading(true);
+    getCharacterImage('tiginis')
+      .then(setCharacterImageUrl)
+      .finally(() => setLoading(false));
+  }, []);
+
+  return (
+    <div className={classNames(styles.card, turn === order && styles.highlight)}>
+      <ProfileImage src={characterImageUrl} loading={loading} />
+      <ProfileName name={name} />
+      <ProfileStats score={score} />
+      {player.piece && <img src={OmokPieces[player.piece].url} alt="omok piece" className={styles.omokIcon} />}
+    </div>
+  );
 }
 
 function ProfileImage({ src, loading }: { src?: string; loading: boolean; }) {
@@ -45,8 +55,8 @@ function ProfileName({ name }: { name: string; }) {
   )
 }
 
-function ProfileStats({ stats } : { stats: Stats }) {
-  const { points, ...rest } = stats;
+function ProfileStats({ score } : { score: Score }) {
+  const { points, ...rest } = score;
 
   return (
     <div className={styles.stats}>
@@ -62,8 +72,7 @@ function ProfileStats({ stats } : { stats: Stats }) {
 }
 
 function Stat({ id, value } : { id: string; value: number; }) {
-  /* @ts-ignore: key is guaranteed to be in Messages */
-  const label = id in Messages ? Messages[id] : '';
+  const label = statLabels[id] ?? '';
   return (
     <div className={styles.spacedSection}>
       <span className={styles.value}>{value}</span>
@@ -72,24 +81,9 @@ function Stat({ id, value } : { id: string; value: number; }) {
   )
 }
 
-export function Profile({ order, player }: ProfileProps) {
-  const turn = useSelector(selectTurn);
-  const [characterImageUrl, setCharacterImageUrl] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    setLoading(true);
-    getCharacterImage('tiginis')
-      .then(setCharacterImageUrl)
-      .finally(() => setLoading(false));
-  }, []);
-
-  return (
-    <div className={classNames(styles.card, turn === order && styles.highlight)}>
-      <ProfileImage src={characterImageUrl} loading={loading} />
-      <ProfileName name={player.name} />
-      <ProfileStats stats={mockStats} />
-      {player.piece && <img src={OmokPieces[player.piece].url} alt="omok piece" className={styles.omokIcon} />}
-    </div>
-  );
-}
+const statLabels: { [id: string]: string } = {
+  points: Messages.points,
+  winCount: Messages.won,
+  lossCount: Messages.lost,
+  tieCount: Messages.tied,
+};

@@ -2,7 +2,7 @@ const profileCard = {
   points: "POINT",
   total: "TOTAL",
   won: "W",
-  loss: "L",
+  lost: "L",
   tied: "T",
 };
 

@@ -8,7 +8,7 @@ const Messages = {
 
 export const inBound = (index: number, array: any[]) => index >= 0 && index < array.length;
 
-export const arePlayersSelected = (players: Players) => players.every(player => !!player.piece);
+export const arePiecesSelected = (players: Players) => players.every(player => !!player.piece);
 
 function validateMove(index: number, values: BoardValue[]): string {
   if (!inBound(index, values)) {

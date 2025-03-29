@@ -4,7 +4,7 @@ import { classNames } from "../../utils/classNames";
 import { OmokPieceType } from "../../utils/enums";
 import { useAppDispatch } from "../../utils/hooks";
 import Messages from "../../utils/messages";
-import { arePlayersSelected as arePiecesSelected } from "../../utils/validation";
+import { arePiecesSelected } from "../../utils/validation";
 import { OmokPiece } from "../omok-piece/OmokPiece";
 
 import styles from "./PlayerSelection.module.scss";
@@ -17,6 +17,7 @@ type PlayerSelectionProps = {
 export function PlayerSelection({ setShowBoard, showBoard }: PlayerSelectionProps) {
   const dispatch = useAppDispatch();
   const players = useSelector(selectPlayers);
+  const doneSelection = arePiecesSelected(players);
 
   const selectType = (type: OmokPieceType) => {
     if (!players[0].piece) {
@@ -28,7 +29,7 @@ export function PlayerSelection({ setShowBoard, showBoard }: PlayerSelectionProp
 
   const startGame = () => {
     // todo: warning message
-    if (arePiecesSelected(players)) {
+    if (doneSelection) {
       setShowBoard(true);
     }
   }
@@ -40,7 +41,7 @@ export function PlayerSelection({ setShowBoard, showBoard }: PlayerSelectionProp
 
   const buttonProps: ButtonProps = showBoard
     ? { children: Messages.restart, onClick: restartGame }
-    : { children: Messages.start, disabled: !arePiecesSelected(players), onClick: startGame };
+    : { children: Messages.start, disabled: !doneSelection, onClick: startGame };
 
   return (
     <div className={styles.selectionContainer}>
@@ -48,11 +49,12 @@ export function PlayerSelection({ setShowBoard, showBoard }: PlayerSelectionProp
         {Object.values(OmokPieceType)
         .map((type, i) => {
             const selected = players.some(p => p.piece === type);
+            const disabled = selected || doneSelection;
             return (
               <button
                 key={`selection_${i}`}
-                disabled={selected}
-                aria-disabled={selected}
+                disabled={disabled}
+                aria-disabled={disabled}
                 className={classNames(styles.omokPieceButton, selected && styles.selected)}
                 onClick={() => selectType(type)}
               >
