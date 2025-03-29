@@ -12,11 +12,11 @@ import { Player, Score } from "../../utils/types";
 import { ScoreType } from "../../utils/enums";
 
 type ProfileProps = {
-  order: number,
+  index: number,
   player: Player,
 }
 
-export function Profile({ order, player }: ProfileProps) {
+export function Profile({ index, player }: ProfileProps) {
   const turn = useSelector(selectTurn);
   const [characterImageUrl, setCharacterImageUrl] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -31,7 +31,7 @@ export function Profile({ order, player }: ProfileProps) {
   }, []);
 
   return (
-    <div className={classNames(styles.card, turn === order && styles.highlight)}>
+    <div className={classNames(styles.card, turn === index && styles.highlight)}>
       <ProfileImage src={characterImageUrl} loading={loading} />
       <ProfileName name={name} />
       <ProfileStats score={score} />

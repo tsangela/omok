@@ -1,16 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from './store'
-import { Player, Players } from '../utils/types'
+import { Player, Players, Score } from '../utils/types'
 import { OmokPieceType, ScoreType } from '../utils/enums'
+import { OmokPieces } from '../api/omok';
+import { nextTurn } from '../utils/validation';
 
 interface GameState {
   players: Players;
   turn: number;
-  // values: BoardValue[];
 };
 
-const buildPlayer = (order: number): Player => ({
-  order, // todo: rename to index
+const buildPlayer = (index: number): Player => ({
+  index,
   name: '',
   imageUrl: '',
   score: {
@@ -22,18 +23,21 @@ const buildPlayer = (order: number): Player => ({
 })
 
 const initialState: GameState = {
-  players: [ buildPlayer(0), buildPlayer(1) ],
+  players: [buildPlayer(0), buildPlayer(1)],
   turn: 0,
-  // values: Array(BOARD_SIZE).fill(undefined),
 };
 
 export const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
-    clearBoard: () => initialState,
+    clearBoard: (state) => ({
+      ...initialState,
+      players: state.players,
+    }),
+    clearGame: () => initialState,
     incrementTurn: (state) => {
-      state.turn = (state.turn + 1) % state.players.length;
+      state.turn = nextTurn(state.turn);
     },
     setPlayerPiece: (state, action: PayloadAction<{ index: number, piece: OmokPieceType }>) => {
       const { players } = state;
@@ -43,21 +47,28 @@ export const gameSlice = createSlice({
         return;
       }
       players[index].piece = piece;
+      players[index].name = OmokPieces[piece].name; // todo: temporary
       state.players = [ ...players ];
     },
-    setTurn: (state, action: PayloadAction<number>) => {
-      state.turn = action.payload;
+    setPlayerScore: (state, action: PayloadAction<{ index: number, score: Score }>) => {
+      const { players } = state;
+      const { index, score } = action.payload;
+      if (!players[index]) {
+        console.error(`No player found at index ${index}`);
+        return;
+      }
+      players[index].score = score;
+      state.players = [ ...players ];
     },
-    // setBoardValues: (state, action: PayloadAction<BoardValue[]>) => {
-    //   state.values = action.payload;
-    // },
   },
 });
 
 export const {
   clearBoard,
+  clearGame,
   incrementTurn,
   setPlayerPiece,
+  setPlayerScore,
 } = gameSlice.actions;
 
 // export const selectBoardValues = (state: RootState) => state.game.values;

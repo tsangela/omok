@@ -34,6 +34,7 @@ export function PlayerSelection({ setShowBoard, showBoard }: PlayerSelectionProp
     }
   }
 
+  // todo: rename to rematch
   const restartGame = () => {
     dispatch(clearBoard());
     setShowBoard(false);

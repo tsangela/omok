@@ -15,3 +15,9 @@ export enum ScoreType {
   Loss = "loss",
   Tie = "tie",
 }
+
+export enum PointMultiplier {
+  Win = 10,
+  Loss = -10,
+  Tie = 5,
+}

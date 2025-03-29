@@ -1,6 +1,6 @@
 import { BOARD_SIZE, COLUMN_SIZE, ROW_SIZE, WIN_CONDITION_LENGTH } from "./constants";
-import { OmokPieceType } from "./enums";
-import { BoardValue } from "./types";
+import { OmokPieceType, PointMultiplier, ScoreType } from "./enums";
+import { BoardValue, Player, Score } from "./types";
 
 function getRowIndices(index: number) {
     const firstIndex = Math.floor(index / ROW_SIZE) * ROW_SIZE;
@@ -52,6 +52,7 @@ function hasWin(indices: number[], values: BoardValue[], type: OmokPieceType) {
     return false;
 }
 
+// todo: how to check if tie xd
 export function isWinner(index: number, values: BoardValue[], type: OmokPieceType) {
     if (!type || type === undefined) {
         return false;
@@ -82,3 +83,28 @@ export function isWinner(index: number, values: BoardValue[], type: OmokPieceTyp
 
     return false;
 }
+
+function calculatePoints(score: Score) {
+    const { win, loss, tie } = score;
+    const numerator = (win * PointMultiplier.Win) + (loss * PointMultiplier.Loss) + (tie * PointMultiplier.Tie)
+    const denominator = (win + loss + tie) * PointMultiplier.Win;
+    return Math.floor(numerator / denominator) * 100;
+}
+
+const scoreCalculations: { [scoreType: string]: (score: Score) => number } = {
+    [ScoreType.Win]: (score: Score) => calculatePoints({ ...score, win: ++score.win }),
+    [ScoreType.Loss]: (score: Score) => calculatePoints({ ...score, loss: ++score.loss }),
+    [ScoreType.Tie]: (score: Score) => calculatePoints({ ...score, tie: ++score.tie }),
+}
+
+// export const calculateScore = (score: Score, scoreType: Exclude<ScoreType, ScoreType.Point>) => scoreCalculations[scoreType](score);
+export const calculateScore = (score: Exclude<Score, ScoreType.Point>, scoreType: Exclude<ScoreType, ScoreType.Point>): Score => {
+    const updatedScore = {
+        ...score,
+        [scoreType]: score[scoreType] + 1,
+    };
+    return {
+        ...updatedScore,
+        [ScoreType.Point]: calculatePoints(updatedScore),
+    }
+};

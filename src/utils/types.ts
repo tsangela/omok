@@ -30,7 +30,7 @@ export type Score = {
 }
 
 export type Player = {
-  order: number;
+  index: number;
   name: string;
   imageUrl: string;
   piece?: OmokPieceType;
