@@ -1,6 +1,6 @@
 import { BOARD_SIZE, COLUMN_SIZE, ROW_SIZE, WIN_CONDITION_LENGTH } from "./constants";
 import { OmokPieceType, PointMultiplier, ScoreType } from "./enums";
-import { BoardValue, Player, Score } from "./types";
+import { BoardValue, RawScore, Score } from "./types";
 
 function getRowIndices(index: number) {
     const firstIndex = Math.floor(index / ROW_SIZE) * ROW_SIZE;
@@ -91,14 +91,7 @@ function calculatePoints(score: Score) {
     return Math.floor(numerator / denominator) * 100;
 }
 
-const scoreCalculations: { [scoreType: string]: (score: Score) => number } = {
-    [ScoreType.Win]: (score: Score) => calculatePoints({ ...score, win: ++score.win }),
-    [ScoreType.Loss]: (score: Score) => calculatePoints({ ...score, loss: ++score.loss }),
-    [ScoreType.Tie]: (score: Score) => calculatePoints({ ...score, tie: ++score.tie }),
-}
-
-// export const calculateScore = (score: Score, scoreType: Exclude<ScoreType, ScoreType.Point>) => scoreCalculations[scoreType](score);
-export const calculateScore = (score: Exclude<Score, ScoreType.Point>, scoreType: Exclude<ScoreType, ScoreType.Point>): Score => {
+export const calculateScore = (score: RawScore<Score>, scoreType: RawScore<ScoreType>): Score => {
     const updatedScore = {
         ...score,
         [scoreType]: score[scoreType] + 1,

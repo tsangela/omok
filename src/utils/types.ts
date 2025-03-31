@@ -29,6 +29,8 @@ export type Score = {
   [ScoreType.Tie]: number;
 }
 
+export type RawScore<T> = Exclude<T, ScoreType.Point>;
+
 export type Player = {
   index: number;
   name: string;
