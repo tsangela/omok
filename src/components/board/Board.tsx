@@ -1,32 +1,29 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { incrementTurn, selectPlayers, selectTurn, setPlayerScore } from "../../store/gameSlice";
 import { BOARD_SIZE } from "../../utils/constants";
 import { ScoreType } from "../../utils/enums";
 import { useAppDispatch } from "../../utils/hooks";
-import { savePlayerProgress } from "../../utils/localStorage";
 import { BoardValue } from "../../utils/types";
 import { inBound, nextTurn } from "../../utils/validation";
 import { calculateScore, isWinner } from "../../utils/winCalculator";
 import { BoardTile, PreviewTile } from "../tile/Tile";
 
 import styles from "./Board.module.scss";
+import Messages from "../../utils/messages";
 
-export function Board() {
+type BoardProps = {
+  winnerIndex: number | undefined;
+  setWinnerIndex: (index: number | undefined) => void;
+}
+
+export function Board({ winnerIndex, setWinnerIndex }: BoardProps) {
   const dispatch = useAppDispatch();
   const players = useSelector(selectPlayers);
   const turn = useSelector(selectTurn);
 
-  const [values, setValues] = useState<(BoardValue)[]>(Array(BOARD_SIZE).fill(undefined));
-  const [winnerIndex, setWinnerIndex] = useState<number | undefined>(undefined);
-
-  useEffect(() => {
-    return () => {
-      savePlayerProgress(players[turn]);
-      savePlayerProgress(players[nextTurn(turn)]);
-    }
-  });
-  
+  const emptyBoard = () => Array(BOARD_SIZE).fill(undefined);
+  const [values, setValues] = useState<(BoardValue)[]>(emptyBoard());
   // Can only place piece if the tile is empty and there is not already a winner
   const canPlacePiece = (i: number) => inBound(i, values) && !values[i] && winnerIndex === undefined;
 
@@ -57,6 +54,11 @@ export function Board() {
     setWinnerIndex(turn);
   }
 
+  function clearBoard() {
+    setValues(emptyBoard());
+    setWinnerIndex(undefined);
+  }
+
   function renderTiles(Tile: typeof BoardTile | typeof PreviewTile) {
     return (
       <div className={styles.grid}>
@@ -75,11 +77,18 @@ export function Board() {
   }
 
   return (
-    <div className={styles.board}>
-      <div className={styles.fixedBoard}>
-        {renderTiles(BoardTile)}
+    <>
+      <div className={styles.board}>
+        <div className={styles.fixedBoard}>
+          {renderTiles(BoardTile)}
+        </div>
+        {renderTiles(PreviewTile)}
       </div>
-      {renderTiles(PreviewTile)}
-    </div>
+      {typeof winnerIndex === "number" && (
+        <button className={styles.rematchButton} onClick={clearBoard}>
+          {Messages.rematch}
+        </button>
+      )}
+    </>
   )
 }

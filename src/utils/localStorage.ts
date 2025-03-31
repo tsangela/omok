@@ -2,10 +2,13 @@ import { Player } from "./types"
 
 const STORAGE_KEY = "PLAYERS";
 
-type StoredPlayers = { [id: string]: Player };
+type PlayerData = Pick<Player, "name" | "imageUrl" | "score">;
+type StoredPlayers = { [id: string]: PlayerData };
 
-// todo: do something about saved index
+const toPlayerData = ({ name, imageUrl, score }: Player): PlayerData => ({ name, imageUrl, score });
+
 export function savePlayerProgress(player: Player) {
+  console.log(player)
   if (!player.name) {
     console.error("Failed to save player progress", player);
     return;
@@ -16,11 +19,11 @@ export function savePlayerProgress(player: Player) {
   const players: StoredPlayers = json ? JSON.parse(json) : {};
 
   // Update stored player data
-  players[player.name] = player;
+  players[player.name] = toPlayerData(player);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(players));
 }
 
-export function loadPlayerProgress(name: string): Player | undefined {
+export function loadPlayerProgress(name: string): PlayerData | undefined {
   if (!name) {
     console.error("Failed to load player progress", name);
     return undefined;

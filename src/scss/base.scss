@@ -3,9 +3,11 @@ $color-black: #252525;
 $color-darkgrey: #4b4b4b;
 $color-grey: #999;
 $color-white: #fff;
-$color-lightblue: #bed0de;
 $color-bluegrey: #769aab;
+$color-lightblue: #bed0de;
+$color-skyblue: #e8f5ff;
 $color-red: #de2a1b;
+$color-maplestory: #f68d12;
 
 // Omok piece colors
 $color-slime: #66dd22;
@@ -24,9 +26,13 @@ $color-card-background: $color-lightblue;
 $color-card-border: $color-bluegrey;
 $color-card-label: $color-bluegrey;
 $color-card-highlight: $color-red;
+$color-card-highlight-winner: $color-slime;
 
 $color-text-dark: $color-black;
 $color-text-default: $color-grey;
+
+$color-spinner-border: #f3f3f3;
+$color-spinner-border-top: $color-darkgrey;
 
 $font-size-small: 12px;
 $font-size-medium: 14px;
@@ -39,6 +45,7 @@ $spacing-4: 4px;
 $spacing-8: 8px;
 $spacing-16: 16px;
 $spacing-24: 24px;
+$spacing-32: 32px;
 $spacing-40: 40px;
 $spacing-64: 64px;
 
@@ -48,3 +55,8 @@ $num-rows: 15;
 $num-columns: 15;
 
 $transition: 0.2s ease;
+
+$font-nanum: "Nanum Gothic Coding", monospace;
+$font-cherry: "Cherry Bomb One", system-ui;
+
+$input-height: $spacing-32;

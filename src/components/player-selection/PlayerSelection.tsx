@@ -1,97 +1,159 @@
-import { useState } from "react";
+import { ButtonHTMLAttributes, useState } from "react";
 import { useSelector } from "react-redux";
-import { clearBoard, selectPlayers, setPlayer, setPlayerPiece } from "../../store/gameSlice";
+import { selectPlayers, setPlayerInfo } from "../../store/gameSlice";
 import { classNames } from "../../utils/classNames";
 import { OmokPieceType } from "../../utils/enums";
 import { useAppDispatch } from "../../utils/hooks";
 import Messages from "../../utils/messages";
-import { arePiecesSelected } from "../../utils/validation";
 import { OmokPiece } from "../omok-piece/OmokPiece";
 
 import styles from "./PlayerSelection.module.scss";
 import { loadPlayerProgress } from "../../utils/localStorage";
 import { OmokPieces } from "../../api/omok";
+import { InfoTooltip } from "../info-icon/InfoTooltip";
 
 type PlayerSelectionProps = {
-  setShowBoard: (show: boolean) => void;
-  showBoard: boolean;
+  onDone: () => void;
 }
 
-export function PlayerSelection({ setShowBoard, showBoard }: PlayerSelectionProps) {
+export function PlayerSelection({ onDone }: PlayerSelectionProps) {
   const dispatch = useAppDispatch();
+
+  const [nickname, setNickname] = useState<string>(''); // todo: debounce
+  const [piece, setPiece] = useState<OmokPieceType>();
+  const [playerIndex, setPlayerIndex] = useState(0);
+  const [warning, setWarning] = useState('');
+
   const players = useSelector(selectPlayers);
+  const selectedPieces = players.map(p => p.piece).filter(p => !!p);
 
-  const doneSelection = arePiecesSelected(players);
+  const isNicknameTaken = () => players.some(p => p.name.toLowerCase() === nickname.toLowerCase());
+  const n = playerIndex + 1;
+  const nthPlayer = Messages.player(n);
 
-  const selectType = (type: OmokPieceType) => {
-    const player = loadPlayerProgress(OmokPieces[type].name);
-    if (!players[0].piece) {
-      dispatch(player
-        ? setPlayer({ index: 0, player })
-        : setPlayerPiece({ index: 0, piece: type})
-      );
-    } else if (!players[1].piece) {
-      dispatch(player
-        ? setPlayer({ index: 1, player })
-        : setPlayerPiece({ index: 1, piece: type})
-      );
+  const validateInputs = () => {
+    if (!piece) {
+      setWarning(Messages.missingPlayerPiece);
+      return false;
     }
-  }
 
-  const startGame = () => {
-    // todo: warning message
-    if (doneSelection) {
-      setShowBoard(true);
+    if (!nickname) {
+      setWarning(Messages.missingPlayerNickname);
+      return false;
     }
+
+    if (isNicknameTaken()) {
+      setWarning(Messages.duplicatePlayerNickname(nickname));
+      return false;
+    }
+
+    return true;
   }
 
-  // todo: rename to rematch
-  const restartGame = () => {
-    dispatch(clearBoard());
-    setShowBoard(false);
-  }
+  const next = () => {
+    if (!validateInputs()) {
+      return;
+    }
 
-  const buttonProps: ButtonProps = showBoard
-    ? { children: Messages.restart, onClick: restartGame }
-    : { children: Messages.start, disabled: !doneSelection, onClick: startGame };
+    const playerData = loadPlayerProgress(nickname) ?? {};
+    dispatch(setPlayerInfo({
+      index: playerIndex,
+      overrides: {
+        ...playerData,
+        name: nickname,
+        piece: piece,
+      },
+    }));
+
+    if (n === players.length) {
+      onDone();
+      return;
+    }
+  
+    setPlayerIndex(playerIndex + 1);
+    setPiece(undefined);
+    setNickname('');
+    setWarning('');
+  }
 
   return (
     <div className={styles.selectionContainer}>
-      <div className={styles.omokPiecesContainer}>
-        {Object.values(OmokPieceType)
-        .map((type, i) => {
-            const selected = players.some(p => p.piece === type);
-            const disabled = selected || doneSelection;
-            return (
-              <button
-                key={`selection_${i}`}
-                disabled={disabled}
-                aria-disabled={disabled}
-                className={classNames(styles.omokPieceButton, selected && styles.selected)}
-                onClick={() => selectType(type)}
-              >
-                <OmokPiece type={type} />
-              </button>
-            )
-        })}
+      <h1 className={styles.title}>{nthPlayer}</h1>
+      <OmokPieceSelection piece={piece} setPiece={setPiece} selectedPieces={selectedPieces} />
+      <div className={styles.inputRow}>
+        <NicknameInput nickname={nickname} setNickname={setNickname} placeholder={nthPlayer} warning={warning} />
+        <IconButton onClick={next} title={Messages.next}>
+          &#11166;
+        </IconButton>
       </div>
-      <Button {...buttonProps} />
     </div>
   );
 }
 
-type ButtonProps = {
-  children: string | React.ReactElement;
-  disabled?: boolean;
-  onClick: () => void;
+type OmokPieceSelectionProps = {
+  piece: OmokPieceType | undefined;
+  setPiece: (type?: OmokPieceType) => void;
+  selectedPieces: OmokPieceType[];
+};
+
+function OmokPieceSelection({ piece, setPiece, selectedPieces }: OmokPieceSelectionProps) {
+  return (
+    <div className={styles.omokPiecesContainer}>
+      {Object.values(OmokPieceType)
+        .map((type, i) => {
+            const selected = type === piece;
+            const disabled = type !== piece && selectedPieces.includes(type);
+            return (
+              <button
+                key={`omok-piece_${i}`}
+                disabled={disabled}
+                aria-disabled={disabled}
+                aria-label={OmokPieces[type].name}
+                title={OmokPieces[type].name}
+                className={classNames(styles.omokPieceButton, selected && styles.selected)}
+                onClick={() => setPiece(type === piece ? undefined : type)}
+              >
+                <OmokPiece type={type} />
+              </button>
+            )
+          }
+        )
+      }
+    </div>
+  )
 }
 
-function Button({ children, disabled, onClick } : ButtonProps) {
+type NicknameInputProps = {
+  nickname: string;
+  setNickname: (nickname: string) => void;
+  placeholder: string;
+  warning: string;
+}
+
+function NicknameInput({ nickname, setNickname, placeholder, warning }: NicknameInputProps) {
+  return (
+    <div className={styles.inputGroup}>
+      <div className={styles.infoInput}>
+        <InfoTooltip message={Messages.playerNicknameHelp} />
+        <input
+          placeholder={placeholder}
+          value={nickname}
+          onChange={e => setNickname(e.target.value)}
+        />
+      </div>
+      <div className={classNames(warning && styles.inputWarning)}><span>{warning}</span></div>
+    </div>
+  )
+}
+
+function IconButton({ children, disabled, onClick, title }: ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
-      className={styles.startButton}
+      className={styles.button}
       disabled={disabled}
       aria-disabled={disabled}
+      aria-label={title}
+      title={title}
       onClick={onClick}
     >
       {children}

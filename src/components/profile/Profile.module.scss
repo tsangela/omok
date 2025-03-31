@@ -27,6 +27,10 @@ $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
 
 .highlight {
   outline: 4px solid base.$color-card-highlight;
+
+  &.winner {
+    outline-color: base.$color-card-highlight-winner;
+  }
 }
 
 .name {

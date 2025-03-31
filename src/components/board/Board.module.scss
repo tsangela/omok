@@ -16,3 +16,20 @@
   display: grid;
   grid-template-columns: repeat(base.$num-rows, 1fr);
 }
+
+.rematchButton {
+  justify-self: center;
+  // height: base.$input-height;
+  padding: base.$spacing-16 base.$spacing-24;
+  border-radius: 100px;
+  border: none;
+  font-size: x-large;
+
+  background-image: linear-gradient(to right, base.$color-pinkteddy, base.$color-bloctopus);
+  color: white;
+    
+  transition: base.$transition;
+  &:hover {
+    transform: scale(1.2);
+  }
+}

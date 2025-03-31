@@ -103,7 +103,7 @@ export async function getCharacterImage(name: string) {
   try {
     const response = await fetch(requestUrl);
     if (!response.ok) {
-      throw new Error("Request response not ok");
+      throw new Error(`Request response not ok: ${response.status}`);
     }
     const data: CharacterRankResponse = await response.json();
     return data.characterImgURL;

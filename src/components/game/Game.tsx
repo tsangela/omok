@@ -10,6 +10,7 @@ import { Profile } from "../profile/Profile";
 
 import styles from "./Game.module.scss";
 import { AssetType } from "../../utils/enums";
+import Messages from "../../utils/messages";
 
 const assetOperations = {
   [AssetType.Ear]: {
@@ -38,6 +39,7 @@ export default function Game() {
   const dispatch = useAppDispatch();
   const players = useSelector(selectPlayers);
   const [showBoard, setShowBoard] = useState(false);
+  const [winnerIndex, setWinnerIndex] = useState<number | undefined>(undefined);
 
   async function fetchAsset(type: AssetType) {
     const { get, set, setStatus } = assetOperations[type];
@@ -52,16 +54,24 @@ export default function Game() {
   }, []);
 
   return (
-    <div className={styles.game}>
-      {/* todo: uncomment? */}
-      {/* {!showBoard && <PlayerSelection showBoard={showBoard} setShowBoard={setShowBoard} />} */}
-      <PlayerSelection setShowBoard={setShowBoard} showBoard={showBoard} />
-      <div className={styles.profilesContainer}>
-        {players.filter(player => !!player.piece).map((player, i) => (
-          <Profile key={`player_${i}`} index={i} player={player} />
-        ))}
+    <>
+      <style>{`body{background:#e8f5ff;}`}</style>
+      <div className={styles.container}>
+        <h1 className={styles.header}>{Messages.omokTitle}</h1>
+        {showBoard
+          ? (
+            <>
+              <div className={styles.profilesContainer}>
+                {players.filter(player => !!player.piece).map((player, i) => (
+                  <Profile key={`player_${i}`} index={i} player={player} winnerIndex={winnerIndex} />
+                ))}
+              </div>
+              <Board winnerIndex={winnerIndex} setWinnerIndex={setWinnerIndex} />
+            </>
+          )
+          : <PlayerSelection onDone={() => setShowBoard(true)} />
+        }        
       </div>
-      {showBoard && <Board />}
-    </div>
+    </>
   )
 }

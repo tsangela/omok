@@ -1,10 +1,20 @@
-@import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap");
+@use "./scss/base.scss" as base;
+@import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Nanum+Gothic+Coding&display=swap');
+
+body {
+  margin: 0;
+}
+
+#root {
+  height: 100%;
+}
 
 :root {
-  background: #e8f5ff;
+  height: 100%;
   color-scheme: light dark;
 
-  font-family: "Nanum Gothic Coding", monospace;
+  font-family: base.$font-nanum;
+  font-weight: 400;
   font-style: normal;
 
   font-synthesis: none;
@@ -20,4 +30,8 @@ button {
   &:disabled {
     cursor: default;
   }
+}
+
+input {
+  font-family: inherit;
 }

@@ -9,13 +9,13 @@ export type Item = {
 };
 
 export type Face = {
-  faceId: Id,
-  name: string,
+  faceId: Id;
+  name: string;
 };
 
 export type Hair = {
-  hairId: Id,
-  name: string,
+  hairId: Id;
+  name: string;
 };
 
 export type Skin = string;

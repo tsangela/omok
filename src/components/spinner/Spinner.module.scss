@@ -1,14 +1,18 @@
+@use "../../scss/base.scss" as base;
+
+$spinner-width: base.$spacing-32;
+$border-width: 5px;
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
-// todo: move colours and sizes to base.scss
 .spinner {
-  border: 5px solid #f3f3f3;
-  border-top: 5px solid #555;
+  border: $border-width solid base.$color-spinner-border;
+  border-top: $border-width solid base.$color-spinner-border-top;
   border-radius: 100%;
-  width: 32px;
-  height: 32px;
+  width: $spinner-width;
+  height: $spinner-width;
   animation: spin 2s linear infinite;
 }

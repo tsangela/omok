@@ -9,8 +9,8 @@ type FetchStatus = {
 }
 
 type Asset<T> = {
-  data: T,
-  status: FetchStatus,
+  data: T;
+  status: FetchStatus;
 };
 
 interface AssetsState {

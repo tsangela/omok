@@ -1,0 +1,56 @@
+@use '../../scss/base.scss' as base;
+
+$text-stroke: 8px;
+
+.page {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  grid-gap: base.$spacing-24;
+}
+
+.title {
+  margin: 0;
+ 
+  font-family: base.$font-cherry;
+  font-size: 10rem;
+  line-height: 10rem;
+  text-align: center;
+
+  color: white;
+  -webkit-text-stroke: $text-stroke base.$color-text-dark;
+  text-stroke: $text-stroke base.$color-text-dark;
+}
+
+.message {
+  margin: 0;
+  padding: base.$spacing-8;
+  font-size: large;
+  background: white;
+  color: base.$color-text-dark;
+}
+
+.button {
+  justify-self: center;
+  width: fit-content;
+  padding: base.$spacing-16 base.$spacing-24;
+
+  border-radius: 100px;
+  border: none;
+
+  font-size: 2rem;
+  background: base.$color-text-dark;
+  color: white;
+  text-decoration: none;
+  &:active, &:visited {
+    color: white;
+  }
+
+  transition: base.$transition;
+  &:hover {
+    transform: scale(1.2);
+  }
+}

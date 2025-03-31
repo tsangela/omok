@@ -4,6 +4,7 @@ import { Player, Players, Score } from '../utils/types'
 import { OmokPieceType, ScoreType } from '../utils/enums'
 import { OmokPieces } from '../api/omok';
 import { nextTurn } from '../utils/validation';
+import { savePlayerProgress } from '../utils/localStorage';
 
 interface GameState {
   players: Players;
@@ -63,7 +64,7 @@ export const gameSlice = createSlice({
         return;
       }
       players[index].piece = piece;
-      players[index].name = OmokPieces[piece].name; // todo: temporary
+      players[index].name = OmokPieces[piece].name;
       state.players = players;
     },
     setPlayerScore: (state, action: PayloadAction<{ index: number, score: Score }>) => {
@@ -74,6 +75,20 @@ export const gameSlice = createSlice({
         return;
       }
       players[index].score = score;
+      players.forEach(savePlayerProgress);
+      state.players = players;
+    },
+    setPlayerInfo: (state, action: PayloadAction<{ index: number, overrides: Partial<Player> }>) => {
+      const { players } = state;
+      const { index, overrides } = action.payload;
+      if (!players[index]) {
+        console.error(`No player found at index ${index}`);
+        return;
+      }
+      players[index] = {
+        ...players[index],
+        ...overrides,
+      };
       state.players = players;
     },
   },
@@ -83,10 +98,11 @@ export const {
   clearBoard,
   clearGame,
   incrementTurn,
-  setPlayer,
+  // setPlayer, // todo: delete
   setPlayerImageUrl,
-  setPlayerPiece,
+  // setPlayerPiece, // todo: delete
   setPlayerScore,
+  setPlayerInfo,
 } = gameSlice.actions;
 
 export const selectTurn = (state: RootState) => state.game.turn;

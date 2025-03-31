@@ -1,8 +1,19 @@
 @use '../../scss/base.scss' as base;
 
 .selectionContainer {
-  display: grid;
-  grid-gap: base.$spacing-8;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  grid-gap: base.$spacing-16;
+}
+
+.title {
+  margin: 0;
+  padding: base.$spacing-4;
+  text-align: center;
+  background: base.$color-text-dark;
+  color: white;
 }
 
 .omokPiecesContainer {
@@ -33,18 +44,89 @@
   height: base.$spacing-64;
   
   background: transparent;
+
+  &:disabled, &.selected {
+    opacity: 0.4;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 }
 
-.startButton {
+.inputRow {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  width: 100%;
+  grid-gap: base.$spacing-4;
+}
+
+.inputGroup {
+  display: inline-block;
+  width: 100%;
+}
+
+.infoInput {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: base.$input-height;
+  width: 100%;
+  flex-grow: 1;
+
+  input {
+    border-radius: 100px;
+    border: none;
+    outline: none;
+    border: 3px solid base.$color-bluegrey;
+    width: 100%;
+
+    transition: base.$transition;
+
+    &:focus {
+      border-color: base.$color-pinkteddy;
+    }
+  }
+
+  input, input::placeholder {
+    font-size: large;
+    padding: base.$spacing-4;
+    text-align: center;
+  }
+}
+
+.inputWarning {
+  display: flex;
+  margin-top: base.$spacing-4;
+  line-height: base.$spacing-16;
+  font-size: small;
+  color: base.$color-red;
+
+  > span {
+    flex-grow: 1;
+    width: 0;
+
+    &:before {
+      content: "\26A0\00A0"; // Warning symbol ⚠
+    }
+  }
+}
+
+.button {
   justify-self: center;
-  width: fit-content;
-  padding: base.$spacing-8 base.$spacing-16;
-  background-image: linear-gradient(to right, base.$color-pinkteddy, base.$color-bloctopus);
+  height: base.$input-height;
+  padding: 0 base.$spacing-16;
   border-radius: 100px;
   border: none;
   font-size: large;
-}
 
-.selected {
-  opacity: 0.4;
+  transition: base.$transition;
+  // background-image: linear-gradient(to right, base.$color-pinkteddy, base.$color-bloctopus);
+  background: base.$color-bluegrey;
+  color: white;
+    
+  &:hover {
+    background: base.$color-pinkteddy;
+  }
 }

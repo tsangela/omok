@@ -1,11 +1,25 @@
 @use '../../scss/base.scss' as base;
 
-.game {
+$text-stroke: 4px;
+
+.container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
   grid-gap: base.$spacing-24;
+}
+
+.header {
+  font-family: base.$font-cherry;
+  font-size: 5rem;
+  line-height: 5rem;
+  margin: 0;
+  text-align: center;
+
+  color: base.$color-text-dark;
+  -webkit-text-stroke: $text-stroke base.$color-text-dark;
+  text-stroke: $text-stroke base.$color-text-dark;
 }
 
 .profilesContainer {

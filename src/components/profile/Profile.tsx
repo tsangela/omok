@@ -15,11 +15,12 @@ import styles from "./Profile.module.scss";
 import { isNexonHostedImageUrl } from "../../utils/validation";
 
 type ProfileProps = {
-  index: number,
-  player: Player,
+  index: number;
+  player: Player;
+  winnerIndex: number | undefined ;
 }
 
-export function Profile({ index, player }: ProfileProps) {
+export function Profile({ index, player, winnerIndex }: ProfileProps) {
   const dispatch = useAppDispatch();
   const turn = useSelector(selectTurn);
   const ears = useSelector(selectEars);
@@ -48,7 +49,11 @@ export function Profile({ index, player }: ProfileProps) {
   }, []);
 
   return (
-    <div className={classNames(styles.card, turn === index && styles.highlight)}>
+    <div className={classNames(
+      styles.card,
+      turn === index && styles.highlight,
+      turn === winnerIndex && styles.winner,
+    )}>
       <ProfileImage src={characterImageUrl} loading={loading} />
       <ProfileName name={name} />
       <ProfileStats score={score} />
