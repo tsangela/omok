@@ -4,7 +4,7 @@ $text-stroke: 4px;
 $text-shadow-offset: 6px;
 
 .container {
-  height: 100%;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -19,10 +19,10 @@ $text-shadow-offset: 6px;
   margin: 0;
   text-align: center;
 
-  color: base.$color-text-dark;
-  -webkit-text-stroke: $text-stroke base.$color-text-dark;
-  text-stroke: $text-stroke base.$color-text-dark;
-  text-shadow: -$text-shadow-offset $text-shadow-offset 0 base.$color-bluegrey;
+  // color: base.$color-text-dark;
+  // -webkit-text-stroke: $text-stroke base.$color-text-dark;
+  // text-stroke: $text-stroke base.$color-text-dark;
+  // text-shadow: -$text-shadow-offset $text-shadow-offset 0 base.$color-bluegrey;
 
   color: white;
   -webkit-text-stroke: $text-stroke base.$color-bluegrey;
