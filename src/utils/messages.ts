@@ -34,7 +34,7 @@ const profileCard = {
 };
 
 const misc = {
-  information: "Information",
+  infoTooltip: (subject: string) => `Information about ${subject}`,
 };
 
 const Messages = {

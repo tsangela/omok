@@ -4,18 +4,27 @@ import { classNames } from "../../utils/classNames";
 import styles from "./InfoTooltip.module.scss";
 
 type InfoIconProps = {
+  id: string;
   className?: string;
   message: string;
+  subject: string;
 }
 
-export function InfoTooltip({ className, message }: InfoIconProps) {
+export function InfoTooltip({ id, className, subject, message }: InfoIconProps) {
   return (
-    <div className={classNames(styles.tooltip, className)}>
+    <div className={styles.tooltip}>
       <span
-        className={styles.icon}
-        aria-label={Messages.information}
+        aria-label={Messages.infoTooltip(subject)}
+        className={classNames(styles.tooltipIcon, className)}
+        tabIndex={0}
       />
-      <span className={classNames(styles.tooltipText)}>{message}</span>
+      <span
+        id={id}
+        className={classNames(styles.tooltipText)}
+        role="tooltip"
+      >
+        {message}
+      </span>
     </div>
   )
 }

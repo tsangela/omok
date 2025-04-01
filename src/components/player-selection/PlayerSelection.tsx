@@ -1,6 +1,6 @@
-import { ButtonHTMLAttributes, useState } from "react";
+import { ButtonHTMLAttributes, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { selectPlayers, setPlayerInfo } from "../../store/gameSlice";
+import { clearGame, selectPlayers, setPlayerInfo } from "../../store/gameSlice";
 import { classNames } from "../../utils/classNames";
 import { OmokPieceType } from "../../utils/enums";
 import { useAppDispatch } from "../../utils/hooks";
@@ -23,6 +23,10 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
   const [piece, setPiece] = useState<OmokPieceType>();
   const [playerIndex, setPlayerIndex] = useState(0);
   const [warning, setWarning] = useState('');
+
+  useEffect(() => {
+    dispatch(clearGame());
+  }, []);
 
   const players = useSelector(selectPlayers);
   const selectedPieces = players.map(p => p.piece).filter(p => !!p);
@@ -131,14 +135,18 @@ type NicknameInputProps = {
 }
 
 function NicknameInput({ nickname, setNickname, placeholder, warning }: NicknameInputProps) {
+  const tooltipId = "nicknameinfo";
+  const inputName = "Nickname";
   return (
     <div className={styles.inputGroup}>
       <div className={styles.infoInput}>
-        <InfoTooltip message={Messages.playerNicknameHelp} />
+        <InfoTooltip id={tooltipId} message={Messages.playerNicknameHelp} subject={inputName} />
         <input
+          name={inputName}
+          aria-describedby={tooltipId}
+          onChange={e => setNickname(e.target.value)}
           placeholder={placeholder}
           value={nickname}
-          onChange={e => setNickname(e.target.value)}
         />
       </div>
       <div className={classNames(warning && styles.inputWarning)}><span>{warning}</span></div>

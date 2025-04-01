@@ -82,8 +82,7 @@ export async function getRandomCharacterImage(
     faceFrame: 0,
     ears: random(ears),
     itemIds: [
-        1060002,
-        1040193
+      1053799, // Maple Academy Outfit (A)
     ],
     effectFrame: 0,
   }
@@ -109,6 +108,6 @@ export async function getCharacterImage(name: string) {
     return data.characterImgURL;
   } catch (error) {
     console.error(`Failed to fetch character image for ${name}.`, error);
-    return PLACEHOLDER_CHARACTER_IMAGE;
+    throw error;
   }
 }

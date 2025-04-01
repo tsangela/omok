@@ -32,10 +32,6 @@ export const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
-    clearBoard: (state) => ({
-      ...initialState,
-      players: state.players, // Keep player progress
-    }),
     clearGame: () => initialState,
     incrementTurn: (state) => {
       state.turn = nextTurn(state.turn);
@@ -95,7 +91,6 @@ export const gameSlice = createSlice({
 });
 
 export const {
-  clearBoard,
   clearGame,
   incrementTurn,
   // setPlayer, // todo: delete

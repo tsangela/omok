@@ -24,6 +24,7 @@ export function Board({ winnerIndex, setWinnerIndex }: BoardProps) {
 
   const emptyBoard = () => Array(BOARD_SIZE).fill(undefined);
   const [values, setValues] = useState<(BoardValue)[]>(emptyBoard());
+
   // Can only place piece if the tile is empty and there is not already a winner
   const canPlacePiece = (i: number) => inBound(i, values) && !values[i] && winnerIndex === undefined;
 

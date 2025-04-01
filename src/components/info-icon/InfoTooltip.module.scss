@@ -2,20 +2,56 @@
 
 $icon-width: base.$spacing-24;
 $icon-margin: base.$spacing-4;
-$tooltip-width: 190px;
+$tooltip-width: 180px;
 $tooltip-padding: base.$spacing-8;
-$tooltip-offset: $icon-width + $icon-margin * 2;
+$tooltip-offset: $icon-width + $icon-margin;
 
 .tooltip {
+  // margin-left: -$tooltip-offset;
+  // margin-right: $icon-margin;
+
   position: relative;
   display: inline-block;
-  margin-left: -$tooltip-offset;
+  border-radius: 100%;
+
+  .tooltipIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    width: $icon-width;
+    height: $icon-width;
+  
+    box-sizing: border-box;
+    border-radius: 100%;
+    border: 1px solid base.$color-text-dark;
+    color: base.$color-text-dark;
+  
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Old versions of Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome, Edge, Opera and Firefox */
+  
+    &:after {
+      content: "i";
+    }
+
+    &:hover, &:focus {
+      + .tooltipText {
+        visibility: visible;
+      }
+    } 
+  }
 
   .tooltipText {
     position: absolute;
     z-index: 1;
     top: -$tooltip-padding;
     right: $tooltip-offset;
+    text-align: left;
 
     width: $tooltip-width;
     padding: $tooltip-padding;
@@ -24,37 +60,5 @@ $tooltip-offset: $icon-width + $icon-margin * 2;
     color: white;
 
     visibility: hidden;
-  }  
-
-  &:hover .tooltipText {
-    visibility: visible;
-  }
-}
-
-.icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  width: $icon-width;
-  height: $icon-width;
-
-  box-sizing: border-box;
-  border-radius: 100%;
-  border: 1px solid base.$color-text-dark;
-  color: base.$color-text-dark;
-  
-  margin: 0 $icon-margin;
-
-  -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Old versions of Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Edge, Opera and Firefox */
-
-  &:after {
-    content: "i";
   }
 }

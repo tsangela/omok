@@ -36,14 +36,14 @@ export function Profile({ index, player, winnerIndex }: ProfileProps) {
   useEffect(() => {
     if (!isNexonHostedImageUrl(player.imageUrl)) {
       setLoading(true);
-      // getCharacterImage('tiginis')
-      //   .then(setCharacterImageUrl)
-      //   .finally(() => setLoading(false));
-      getRandomCharacterImage(ears, faces, hairs, skins)
-        .then(url => {
-          dispatch(setPlayerImageUrl({ index, imageUrl: url }));
-          setCharacterImageUrl(url);
-        })
+      getCharacterImage(player.name)
+        .then(setCharacterImageUrl)
+        .catch(() => 
+          getRandomCharacterImage(ears, faces, hairs, skins)
+            .then(url => {
+              dispatch(setPlayerImageUrl({ index, imageUrl: url }));
+              setCharacterImageUrl(url);
+            }))
         .finally(() => setLoading(false));
     }
   }, []);
