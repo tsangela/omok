@@ -26,7 +26,7 @@
   transition: transform base.$transition;
 
   &:not(:disabled) {
-    &:hover, &:focus {
+    &:hover, &:focus-visible {
       transform: scale(1.2);
     }
   }

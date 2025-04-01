@@ -13,7 +13,7 @@ import './index.scss'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path={Path.Root} element={<Layout />} errorElement={<NotFound />}>
+    <Route path={Path.Home} element={<Layout />} errorElement={<NotFound />}>
       <Route
         path={Path.Home}
         element={<Home />}
@@ -27,7 +27,8 @@ const router = createBrowserRouter(
         element={<NotFound />}
       />
     </Route>
-  )
+  ),
+  { basename: Path.Root },
 );
 
 
