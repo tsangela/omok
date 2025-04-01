@@ -23,6 +23,10 @@ $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
   box-shadow: $box-shadow;
 
   height: $character-image-height;
+
+  img {
+    image-rendering: pixelated;
+  }
 }
 
 .highlight {
