@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
-import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
+import { createHashRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
 import { store } from './store/store.ts'
 import Path from './utils/path.ts';
 import Game from './components/game/Game.tsx'
@@ -11,9 +11,9 @@ import { NotFound } from './views/not-found/NotFound.tsx';
 
 import './index.scss'
 
-const router = createBrowserRouter(
+const router = createHashRouter(
   createRoutesFromElements(
-    <Route path={Path.Home} element={<Layout />} errorElement={<NotFound />}>
+    <Route element={<Layout />}>
       <Route
         path={Path.Home}
         element={<Home />}

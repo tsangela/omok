@@ -1,6 +1,6 @@
 const Path = {
-  Root: "/omok",
-  Home: "/",
+  Root: "/",
+  Home: "",
   Game: "/play",
 }
 
