@@ -19,6 +19,7 @@ $tile-width: 3.125rem;
 
 .guideline {
   &:before, &:after {
+    z-index: -1;
     position: absolute;
     display: block;
     background: base.$color-board-guideline;

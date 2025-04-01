@@ -1,6 +1,7 @@
 @use '../../scss/base.scss' as base;
 
 $text-stroke: 4px;
+$text-shadow-offset: 6px;
 
 .container {
   display: flex;
@@ -20,6 +21,12 @@ $text-stroke: 4px;
   color: base.$color-text-dark;
   -webkit-text-stroke: $text-stroke base.$color-text-dark;
   text-stroke: $text-stroke base.$color-text-dark;
+  text-shadow: -$text-shadow-offset $text-shadow-offset 0 base.$color-bluegrey;
+
+  color: white;
+  -webkit-text-stroke: $text-stroke base.$color-bluegrey;
+  text-stroke: $text-stroke base.$color-bluegrey;
+  text-shadow: -$text-shadow-offset $text-shadow-offset 0 base.$color-bluegrey;
 }
 
 .profilesContainer {

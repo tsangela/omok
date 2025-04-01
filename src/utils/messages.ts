@@ -36,6 +36,7 @@ const misc = {
   infoTooltip: (subject: string) => `Information about ${subject}`,
   player: (index: number) => `Player ${index}`,
   winner: (name: string) => `${name} won!`,
+  wins: 'wins',
 };
 
 const Messages = {

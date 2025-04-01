@@ -1,7 +1,6 @@
 @use '../../scss/base.scss' as base;
 
 .omokIcon {
-  z-index: 1;
   image-rendering: pixelated;
   width: base.$size-icon;
 }

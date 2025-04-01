@@ -11,6 +11,7 @@ import styles from "./PlayerSelection.module.scss";
 import { loadPlayerProgress } from "../../utils/localStorage";
 import { OmokPieces } from "../../api/omok";
 import { InfoTooltip } from "../info-icon/InfoTooltip";
+import { MAX_NICKNAME_CHAR_LENGTH } from "../../utils/constants";
 
 type PlayerSelectionProps = {
   onDone: () => void;
@@ -147,6 +148,7 @@ function NicknameInput({ nickname, setNickname, placeholder, warning }: Nickname
           onChange={e => setNickname(e.target.value)}
           placeholder={placeholder}
           value={nickname}
+          maxLength={MAX_NICKNAME_CHAR_LENGTH}
         />
         <div className={classNames(warning && styles.inputWarning)}>
           <span>{warning}</span>

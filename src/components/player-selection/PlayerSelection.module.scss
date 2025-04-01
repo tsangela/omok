@@ -23,7 +23,7 @@
 }
 
 .omokPieceButton, .startButton {
-  transition: base.$transition;
+  transition: transform base.$transition;
 
   &:not(:disabled) {
     &:hover, &:focus {

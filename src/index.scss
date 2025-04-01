@@ -1,5 +1,6 @@
 @use "./scss/base.scss" as base;
-@import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Nanum+Gothic+Coding&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=Anton&family=Cherry+Bomb+One&family=Nanum+Gothic+Coding&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Nanum+Gothic+Coding&family=Protest+Strike&family=Sigmar+One&display=swap');
 
 body {
   margin: 0;
@@ -34,8 +35,4 @@ button {
 
 input {
   font-family: inherit;
-}
-
-span, p {
-  color: base.$color-black;
 }

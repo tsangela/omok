@@ -1,6 +1,7 @@
 @use '../../scss/base.scss' as base;
 
 .board {
+  z-index: 0;
   position: relative;
 
   padding: base.$spacing-24;
@@ -29,27 +30,72 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  grid-gap: base.$spacing-8;
+  grid-gap: base.$spacing-64;
 }
 
-.winner {
-  font-size: 3rem;
-  font-family: base.$font-cherry;
-  color: base.$color-black;
+.resultCard {
+  display: flex;
+  padding: base.$spacing-8 base.$spacing-32;
+  background-image: linear-gradient(to right, #522021, #8c4531);
+  outline: 4px solid gold;
+  border-radius: 4px;
+  filter: drop-shadow(2px 2px 2px base.$color-black);
+  transform: rotate(-5deg);
+
+  > span {
+    color: base.$color-white;
+  }
+
+  .name {
+    z-index: 0;
+    font-family: base.$font-protest;
+    font-size: 2rem;
+    -webkit-text-stroke: 2px #8c4531;
+    text-shadow: 6px 6px 16px black;
+  }
+
+  .wins {
+    font-family: base.$font-protest;
+    font-size: 4rem;
+    letter-spacing: -4px;
+    text-transform: uppercase;
+    -webkit-text-stroke: 4px #ff9900;
+    text-shadow: 6px 6px 4px #522021;
+  }
+
+  transition: transform base.$transition;
+  transform: rotate(-5deg) scale(1.5);
+  &:hover {
+    transform: rotate(-8deg) scale(1.55);
+  }
 }
 
 .rematchButton {
-  justify-self: center;
-  padding: base.$spacing-8 base.$spacing-16;
-  border-radius: 100px;
-  border: none;
-  font-size: large;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  grid-gap: base.$spacing-8;
 
-  background-image: linear-gradient(to right, base.$color-pinkteddy, base.$color-bloctopus);
-  color: white;
-    
-  transition: base.$transition;
-  &:hover {
-    transform: scale(1.2);
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: base.$spacing-16 base.$spacing-24;
+  
+    font-size: large;
+    font-family: base.$font-nanum;
+  
+    border-radius: 100px;
+    border: none;
+  
+    background: base.$color-black;
+    color: white;
+
+    transition: text-shadow, transform 0.2s ease;
+    &:hover {
+      text-shadow: 0 0 8px white;
+      transform: scale(1.1);
+    }
   }
 }

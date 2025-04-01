@@ -49,7 +49,7 @@ $text-stroke: 8px;
     color: white;
   }
 
-  transition: base.$transition;
+  transition: transform base.$transition;
   &:hover {
     transform: scale(1.2);
   }

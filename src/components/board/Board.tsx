@@ -100,11 +100,16 @@ type WinnerScreenProps = {
 
 function WinnerScreen({ clearBoard, winner }: WinnerScreenProps) {
   return (
-    <div className={classNames(styles.fixedBoard, styles.winnerScreen)}>
-      <span className={styles.winner}>{Messages.winner(winner.name)}</span>
-      <button className={styles.rematchButton} onClick={clearBoard}>
-        {Messages.rematch}
-      </button>
+    <div className={styles.winnerScreen}>
+      <div className={styles.resultCard}>
+        <span className={styles.name}>{winner.name}</span>
+        <span className={styles.wins}>{Messages.wins}</span>
+      </div>
+      <div className={styles.rematchButton}>
+        <button onClick={clearBoard}>
+          {Messages.rematch}
+        </button>
+      </div>
     </div>
   )
 }
