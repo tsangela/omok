@@ -26,7 +26,7 @@
   transition: base.$transition;
 
   &:not(:disabled) {
-    &:hover {
+    &:hover, &:focus {
       transform: scale(1.2);
     }
   }
@@ -54,24 +54,22 @@
   }
 }
 
+$input-line-height: base.$spacing-16;
+$input-padding: base.$spacing-4;
+$input-border-width: 3px;
+$input-height: $input-line-height + $input-padding * 2 + $input-border-width * 2;
+
 .inputRow {
   display: flex;
   flex-direction: row;
-  align-items: start;
+  align-items: center;
   width: 100%;
   grid-gap: base.$spacing-4;
 }
 
 .inputGroup {
+  position: relative;
   display: inline-block;
-  width: 100%;
-}
-
-.infoInput {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  height: base.$input-height;
   width: 100%;
   flex-grow: 1;
 
@@ -80,41 +78,39 @@
     border: none;
     outline: none;
     border: 3px solid base.$color-bluegrey;
-    width: 100%;
-    margin-left: base.$spacing-4;
-
-    transition: base.$transition;
 
     &:focus {
       border-color: base.$color-pinkteddy;
     }
   }
-
+  
   input, input::placeholder {
     font-size: large;
     padding: base.$spacing-4;
+    line-height: $input-line-height;
     text-align: center;
   }
-}
+  
+  .inputWarning {
+    position: absolute;
+    top: $input-height;
+    margin-top: base.$spacing-4;
 
-.inputWarning {
-  display: flex;
-  margin-top: base.$spacing-4;
-  line-height: base.$spacing-16;
-  font-size: small;
-  color: base.$color-red;
+    color: base.$color-red;
+    font-size: small;
+  
+    > span {
+      word-wrap: break-word;
+      white-space: break-spaces;
 
-  > span {
-    flex-grow: 1;
-    width: 0;
-
-    &:before {
-      content: "\26A0\00A0"; // Warning symbol ⚠
+      &:before {
+        content: "\26A0\00A0"; // Warning symbol ⚠
+      }
     }
   }
 }
 
-.button {
+.iconButton {
   justify-self: center;
   height: base.$input-height;
   padding: 0 base.$spacing-16;
@@ -122,12 +118,12 @@
   border: none;
   font-size: large;
 
-  transition: base.$transition;
   // background-image: linear-gradient(to right, base.$color-pinkteddy, base.$color-bloctopus);
   background: base.$color-bluegrey;
   color: white;
     
-  &:hover {
+  &:hover, &:focus {
+    outline: none;
     background: base.$color-pinkteddy;
   }
 }

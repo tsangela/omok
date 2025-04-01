@@ -138,9 +138,9 @@ function NicknameInput({ nickname, setNickname, placeholder, warning }: Nickname
   const tooltipId = "nicknameinfo";
   const inputName = "Nickname";
   return (
-    <div className={styles.inputGroup}>
-      <div className={styles.infoInput}>
-        <InfoTooltip id={tooltipId} message={Messages.playerNicknameHelp} subject={inputName} />
+    <>
+      <InfoTooltip id={tooltipId} message={Messages.playerNicknameHelp} subject={inputName} />
+      <div className={styles.inputGroup}>
         <input
           name={inputName}
           aria-describedby={tooltipId}
@@ -148,16 +148,18 @@ function NicknameInput({ nickname, setNickname, placeholder, warning }: Nickname
           placeholder={placeholder}
           value={nickname}
         />
+        <div className={classNames(warning && styles.inputWarning)}>
+          <span>{warning}</span>
+        </div>
       </div>
-      <div className={classNames(warning && styles.inputWarning)}><span>{warning}</span></div>
-    </div>
+    </>
   )
 }
 
 function IconButton({ children, disabled, onClick, title }: ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
-      className={styles.button}
+      className={styles.iconButton}
       disabled={disabled}
       aria-disabled={disabled}
       aria-label={title}

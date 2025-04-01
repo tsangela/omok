@@ -40,6 +40,10 @@ $tooltip-offset: $icon-width + $icon-margin;
     }
 
     &:hover, &:focus {
+      border-color: base.$color-pinkteddy;
+      color: base.$color-pinkteddy;
+      outline-color: base.$color-pinkteddy;
+
       + .tooltipText {
         visibility: visible;
       }
