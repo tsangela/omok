@@ -79,16 +79,18 @@ function ProfileName({ name }: { name: string; }) {
 }
 
 function ProfileStats({ score } : { score: Score }) {
-  const { [ScoreType.Point]: points, ...rest } = score;
+  const { [ScoreType.Point]: points, win, loss, tie } = score;
 
   return (
     <div className={styles.stats}>
-      <Stat id={ScoreType.Point} value={points} />
-      <div className={styles.total}>
-        <span className={styles.label}>{Messages.total}</span>
-        <div>
-          {Object.entries(rest).map(([key, value]) => <Stat key={key} id={key} value={value} />)}
-        </div>
+      <div className={styles.statsRow}>
+        <Stat id={ScoreType.Point} value={points} />
+      </div>
+      <div className={styles.statsRow}>
+        <span id="total" className={styles.label}>{Messages.total}</span>
+        <Stat id={ScoreType.Win} value={win} />
+        <Stat id={ScoreType.Loss} value={loss} />
+        <Stat id={ScoreType.Tie} value={tie} />
       </div>
     </div>
   )
@@ -97,10 +99,10 @@ function ProfileStats({ score } : { score: Score }) {
 function Stat({ id, value } : { id: string; value: number; }) {
   const label = statLabels[id] ?? '';
   return (
-    <div className={styles.spacedSection}>
+    <>
       <span className={styles.value}>{value}</span>
       <span className={styles.label}>{label}</span>
-    </div>
+    </>
   )
 }
 

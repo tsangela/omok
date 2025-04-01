@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { incrementTurn, selectPlayers, selectTurn, setPlayerScore } from "../../store/gameSlice";
+import Messages from "../../utils/messages";
+import { classNames } from "../../utils/classNames";
 import { BOARD_SIZE } from "../../utils/constants";
 import { ScoreType } from "../../utils/enums";
 import { useAppDispatch } from "../../utils/hooks";
-import { BoardValue } from "../../utils/types";
+import { BoardValue, Player } from "../../utils/types";
 import { inBound, nextTurn } from "../../utils/validation";
 import { calculateScore, isWinner } from "../../utils/winCalculator";
 import { BoardTile, PreviewTile } from "../tile/Tile";
 
 import styles from "./Board.module.scss";
-import Messages from "../../utils/messages";
 
 type BoardProps = {
   winnerIndex: number | undefined;
@@ -84,12 +85,26 @@ export function Board({ winnerIndex, setWinnerIndex }: BoardProps) {
           {renderTiles(BoardTile)}
         </div>
         {renderTiles(PreviewTile)}
+        {typeof winnerIndex === "number" && (
+          <WinnerScreen clearBoard={clearBoard} winner={players[winnerIndex]} />
+        )}
       </div>
-      {typeof winnerIndex === "number" && (
-        <button className={styles.rematchButton} onClick={clearBoard}>
-          {Messages.rematch}
-        </button>
-      )}
     </>
+  )
+}
+
+type WinnerScreenProps = {
+  clearBoard: () => void;
+  winner: Player;
+}
+
+function WinnerScreen({ clearBoard, winner }: WinnerScreenProps) {
+  return (
+    <div className={classNames(styles.fixedBoard, styles.winnerScreen)}>
+      <span className={styles.winner}>{Messages.winner(winner.name)}</span>
+      <button className={styles.rematchButton} onClick={clearBoard}>
+        {Messages.rematch}
+      </button>
+    </div>
   )
 }

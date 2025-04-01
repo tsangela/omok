@@ -17,13 +17,33 @@
   grid-template-columns: repeat(base.$num-rows, 1fr);
 }
 
+.winnerScreen {
+  width: 100%;
+  height: 100%;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  grid-gap: base.$spacing-8;
+}
+
+.winner {
+  font-size: 3rem;
+  font-family: base.$font-cherry;
+  color: base.$color-black;
+}
+
 .rematchButton {
   justify-self: center;
-  // height: base.$input-height;
-  padding: base.$spacing-16 base.$spacing-24;
+  padding: base.$spacing-8 base.$spacing-16;
   border-radius: 100px;
   border: none;
-  font-size: x-large;
+  font-size: large;
 
   background-image: linear-gradient(to right, base.$color-pinkteddy, base.$color-bloctopus);
   color: white;

@@ -1,6 +1,6 @@
 @use '../../scss/base.scss' as base;
 
-$card-width: 120px;
+$card-width: 110px;
 $character-image-height: 96px;
 $padding: base.$spacing-2;
 $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
@@ -50,25 +50,43 @@ $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
     background: base.$color-white;
     padding: $padding;
   }
-}
 
-.total {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-}
+  .statsRow:nth-child(1) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 
-.spacedSection {
-  display: flex;
-  justify-content: space-between;
-  align-items: end;
+    .label, .value {
+      justify-self: end;
+    }
+  }
+
+  .statsRow:nth-child(2) {
+    display: grid;
+    grid-template: 1fr 1fr / 3fr 1fr 1fr;
   
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
+    .label, .value {
+      justify-self: end;
+      align-self: center;
+    }
+
+    [id=total] {
+      grid-area: 1 / 1 / span 3 / auto;
+      justify-self: start;
+      align-self: start;
+
+      &:after {
+        content: "\2192"; // Rightwards arrow →
+        font-family: monospace;
+        color: base.$color-maplestory;
+      }
+    }
+  }
 }
 
 .label {
-  font-size: base.$font-size-medium; // todo: just use built-in ones
+  font-size: small;
+  line-height: 16px;
+  align-items: center;
 }
 
 .value {
@@ -77,6 +95,6 @@ $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
 
 .omokIcon {
   position: absolute;
-  left: base.$spacing-8;
-  bottom: base.$spacing-8;
+  left: base.$spacing-4;
+  bottom: base.$spacing-4;
 }

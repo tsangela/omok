@@ -22,7 +22,6 @@ const pages = {
   omokTitle: "omok",
   notFoundTitle: "OOPS!", // 400
   notFoundInfo: "Something went wrong...", // There's nothing to see here...
-  player: (index: number) => `Player ${index}`,
 };
 
 const profileCard = {
@@ -35,6 +34,8 @@ const profileCard = {
 
 const misc = {
   infoTooltip: (subject: string) => `Information about ${subject}`,
+  player: (index: number) => `Player ${index}`,
+  winner: (name: string) => `${name} won!`,
 };
 
 const Messages = {

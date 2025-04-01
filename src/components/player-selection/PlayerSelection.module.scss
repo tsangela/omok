@@ -104,7 +104,7 @@ $input-height: $input-line-height + $input-padding * 2 + $input-border-width * 2
       white-space: break-spaces;
 
       &:before {
-        content: "\26A0\00A0"; // Warning symbol ⚠
+        content: "\26A0\00A0"; // Warning sign ⚠
       }
     }
   }
