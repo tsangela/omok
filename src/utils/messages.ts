@@ -14,10 +14,6 @@ const help = {
   missingPlayerPiece: 'Please select an omok piece.',
 };
 
-const icons = {
-  nextIcon: "&#11166;",
-};
-
 const pages = {
   omokTitle: "omok",
   notFoundTitle: "OOPS!", // 400

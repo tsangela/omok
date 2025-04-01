@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { incrementTurn, selectPlayers, selectTurn, setPlayerScore } from "../../store/gameSlice";
 import Messages from "../../utils/messages";
-import { classNames } from "../../utils/classNames";
 import { BOARD_SIZE } from "../../utils/constants";
 import { ScoreType } from "../../utils/enums";
 import { useAppDispatch } from "../../utils/hooks";

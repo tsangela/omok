@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../utils/hooks";
 import { selectTurn, setPlayerImageUrl } from "../../store/gameSlice";
 import { selectEars, selectFaceIds, selectHairIds, selectSkins } from "../../store/assetsSlice";
