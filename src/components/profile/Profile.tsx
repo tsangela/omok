@@ -8,11 +8,11 @@ import { ScoreType } from "../../utils/enums";
 import Messages from "../../utils/messages";
 import { Player, Score } from "../../utils/types";
 import { getCharacterImage, getRandomCharacterImage } from "../../api/character";
-import { OmokPieces } from "../../api/omok";
 import { Spinner } from "../spinner/Spinner";
 
 import styles from "./Profile.module.scss";
 import { isNexonHostedImageUrl } from "../../utils/validation";
+import { OmokPiece } from "../omok-piece/OmokPiece";
 
 type ProfileProps = {
   index: number;
@@ -57,7 +57,9 @@ export function Profile({ index, player, winnerIndex }: ProfileProps) {
       <ProfileImage src={characterImageUrl} loading={loading} />
       <ProfileName name={name} />
       <ProfileStats score={score} />
-      {player.piece && <img src={OmokPieces[player.piece].url} alt="omok piece" className={styles.omokIcon} />}
+      {player.piece && (
+        <OmokPiece className={styles.omokIcon} type={player.piece} size="small" />
+      )}
     </div>
   );
 }
