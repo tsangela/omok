@@ -1,17 +1,18 @@
 import { ButtonHTMLAttributes, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import { clearGame, selectPlayers, setPlayerInfo } from "../../store/gameSlice";
 import { classNames } from "../../utils/classNames";
+import { MAX_NICKNAME_CHAR_LENGTH } from "../../utils/constants";
 import { OmokPieceType } from "../../utils/enums";
 import { useAppDispatch } from "../../utils/hooks";
+import { loadPlayerProgress } from "../../utils/localStorage";
 import Messages from "../../utils/messages";
+import { OmokPieces } from "../../api/omok";
+import { InfoTooltip } from "../info-icon/InfoTooltip";
 import { OmokPiece } from "../omok-piece/OmokPiece";
 
 import styles from "./PlayerSelection.module.scss";
-import { loadPlayerProgress } from "../../utils/localStorage";
-import { OmokPieces } from "../../api/omok";
-import { InfoTooltip } from "../info-icon/InfoTooltip";
-import { MAX_NICKNAME_CHAR_LENGTH } from "../../utils/constants";
 
 type PlayerSelectionProps = {
   onDone: () => void;
@@ -19,7 +20,9 @@ type PlayerSelectionProps = {
 
 export function PlayerSelection({ onDone }: PlayerSelectionProps) {
   const dispatch = useAppDispatch();
+  const players = useSelector(selectPlayers);
 
+  // Current form values
   const [nickname, setNickname] = useState<string>(''); // todo: debounce
   const [piece, setPiece] = useState<OmokPieceType>();
   const [playerIndex, setPlayerIndex] = useState(0);
@@ -29,12 +32,9 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
     dispatch(clearGame());
   }, []);
 
-  const players = useSelector(selectPlayers);
-  const selectedPieces = players.map(p => p.piece).filter(p => !!p);
-
-  const isNicknameTaken = () => players.some(p => p.name.toLowerCase() === nickname.toLowerCase());
-  const n = playerIndex + 1;
-  const nthPlayer = Messages.player(n);
+  const isNicknameTaken = () => players
+    .filter((_, i) => i !== playerIndex)
+    .some(p => p.name.toLowerCase() === nickname.toLowerCase());
 
   const validateInputs = () => {
     if (!piece) {
@@ -55,6 +55,23 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
     return true;
   }
 
+  const loadPlayer = (playerIndex: number) => {
+    const player = players[playerIndex];
+    setPlayerIndex(playerIndex);
+    setPiece(player.piece);
+    setNickname(player.name);
+    setWarning('');
+  }
+  
+  const back = () => {
+    if (playerIndex === 0) {
+      return;
+    }
+
+    // Previous player
+    loadPlayer(playerIndex - 1);
+  }
+
   const next = () => {
     if (!validateInputs()) {
       return;
@@ -70,16 +87,18 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
       },
     }));
 
-    if (n === players.length) {
+    if (playerIndex === players.length - 1) {
       onDone();
       return;
     }
   
-    setPlayerIndex(playerIndex + 1);
-    setPiece(undefined);
-    setNickname('');
-    setWarning('');
+    // Next player
+    loadPlayer(playerIndex + 1);
   }
+  
+  const selectedPieces = players.map(p => p.piece).filter(p => !!p);
+  const n = playerIndex + 1;
+  const nthPlayer = Messages.player(n);
 
   return (
     <div className={styles.selectionContainer}>
@@ -87,8 +106,11 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
       <OmokPieceSelection piece={piece} setPiece={setPiece} selectedPieces={selectedPieces} />
       <div className={styles.inputRow}>
         <NicknameInput nickname={nickname} setNickname={setNickname} placeholder={nthPlayer} warning={warning} />
+        <IconButton onClick={back} title={Messages.back}>
+          <FiArrowLeft />
+        </IconButton>
         <IconButton onClick={next} title={Messages.next}>
-          &#11166;
+          <FiArrowRight />
         </IconButton>
       </div>
     </div>

@@ -23,6 +23,8 @@
 }
 
 .omokPieceButton {
+  background: transparent;
+  // outline: none;
   border: transparent;
   border-radius: 100%;
 
@@ -32,8 +34,6 @@
 
   width: base.$spacing-64;
   height: base.$spacing-64;
-  
-  background: transparent;
 
   transition: transform base.$transition;
 
@@ -111,7 +111,9 @@ $input-height: $input-line-height + $input-padding * 2 + $input-border-width * 2
 }
 
 .iconButton {
-  justify-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: base.$input-height;
   padding: 0 base.$spacing-16;
   border-radius: 100px;

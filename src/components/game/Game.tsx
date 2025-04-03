@@ -11,6 +11,8 @@ import { Profile } from "../profile/Profile";
 import styles from "./Game.module.scss";
 import { AssetType } from "../../utils/enums";
 import Messages from "../../utils/messages";
+import { Link } from "react-router-dom";
+import Path from "../../utils/path";
 
 const assetOperations = {
   [AssetType.Ear]: {
@@ -57,7 +59,9 @@ export default function Game() {
     <>
       <style>{`body{background:#e8f5ff;}`}</style>
       <div className={styles.container}>
-        <h1 className={styles.header}>{Messages.omokTitle}</h1>
+        <Link to={Path.Root} className={styles.header}>
+          <h1>{Messages.omokTitle}</h1>
+        </Link>
         {showBoard
           ? (
             <>

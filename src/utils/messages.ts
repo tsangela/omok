@@ -1,5 +1,6 @@
 const buttons = {
   enter: "Enter",
+  back: "Back",
   next: "Next",
   play: "Play",
   rematch: "Rematch",
