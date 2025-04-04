@@ -10,7 +10,6 @@ export default defineConfig({
       '/api': {
         target: 'https://www.nexon.com',
         changeOrigin: true,
-        secure: false,
         configure: (proxy, _options) => {
           proxy.on('error', (err, _req, _res) => {
             console.log('proxy error', err);
