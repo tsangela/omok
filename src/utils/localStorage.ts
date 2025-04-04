@@ -8,7 +8,6 @@ type StoredPlayers = { [id: string]: PlayerData };
 const toPlayerData = ({ name, imageUrl, score }: Player): PlayerData => ({ name, imageUrl, score });
 
 export function savePlayerProgress(player: Player) {
-  console.log(player)
   if (!player.name) {
     console.error("Failed to save player progress", player);
     return;

@@ -60,7 +60,6 @@ export default function Game() {
   }, []);
 
   const startGame = useCallback(() => {
-    console.log(players);
     players.forEach(p => {
       const playerData = loadPlayerProgress(p.name);
       if (playerData) {

@@ -1,7 +1,7 @@
 @use '../../scss/base.scss' as base;
 
-$card-width: 110px;
-$character-image-height: 96px;
+$character-image-width: 96px;
+$card-width: $character-image-width;
 $padding: base.$spacing-2;
 $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
 
@@ -22,8 +22,6 @@ $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
   -webkit-box-shadow: inset $box-shadow;
   -moz-box-shadow: inset $box-shadow;
   box-shadow: $box-shadow;
-
-  height: $character-image-height;
 
   img {
     image-rendering: pixelated;

@@ -90,17 +90,20 @@ export async function getRandomCharacterImage(
 }
 
 type CharacterRankResponse = {
-  ranks: any[],
-  // characterName: string,
-  // characterImgURL: string,
+  ranks: {
+    characterName: string,
+    characterImgURL: string,
+  }[],
 }
 
 export async function getCharacterImage(name: string) {
   if (!name) {
     throw new Error(`Cannot search for character '${name}'`);
   }
-  //const requestUrl = `https://www.nexon.com/api/maplestory/no-auth/ranking/v2/na?type=overall&id=weekly&character_name=${name}`
-  const requestUrl = `http://localhost:5000/${name}`
+
+  // const requestUrl = `https://www.nexon.com/api/maplestory/no-auth/ranking/v2/na?type=overall&id=weekly&character_name=${name}`
+  // const requestUrl = `http://localhost:5000/${name}`
+  const requestUrl = `/api/maplestory/no-auth/ranking/v2/na?type=overall&id=weekly&character_name=${name}`
   
   try {
     const response = await fetch(requestUrl,{
@@ -113,6 +116,7 @@ export async function getCharacterImage(name: string) {
       throw new Error(`Request response not ok: ${response.status}`);
     }
     const data: CharacterRankResponse = await response.json();
+    console.log(data); // todo: delete
     return data.ranks[0].characterImgURL;
   } catch (error) {
     console.error(`Failed to fetch character image for ${name}.`, error);
