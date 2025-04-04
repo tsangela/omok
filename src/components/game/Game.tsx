@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -59,7 +59,8 @@ export default function Game() {
     [AssetType.Ear, AssetType.Face, AssetType.Hair, AssetType.Skin].forEach(type => fetchAsset(type));
   }, []);
 
-  function startGame() {
+  const startGame = useCallback(() => {
+    console.log(players);
     players.forEach(p => {
       const playerData = loadPlayerProgress(p.name);
       if (playerData) {
@@ -67,13 +68,13 @@ export default function Game() {
       }
     });
     setShowBoard(true);
-  }
+  }, [players]);
 
   return (
     <>
       <style>{`body{background:#e8f5ff;}`}</style>
       <div className={styles.container}>
-        <Link to={Path.Root} className={styles.header}>
+        <Link to={Path.Root} className={styles.header} /*onClick={() => dispatch(clearGame())}*/>
           <h1>{Messages.omokTitle}</h1>
         </Link>
         {showBoard

@@ -13,7 +13,7 @@
   padding: base.$spacing-4;
   text-align: center;
   background: base.$color-text-dark;
-  color: white;
+  color: base.$color-white;
 }
 
 .omokPiecesContainer {
@@ -132,7 +132,7 @@ $input-height: $input-line-height + $input-padding * 2 + $input-border-width * 2
   &:not(:disabled) {
     // background-image: linear-gradient(to right, base.$color-pinkteddy, base.$color-bloctopus);
     background: base.$color-bluegrey;
-    color: white;
+    color: base.$color-white;
     
     &:hover, &:focus-visible {
       outline: none;

@@ -55,7 +55,7 @@ export const gameSlice = createSlice({
         return;
       }
       players[index].score = score;
-      players.forEach(savePlayerProgress);
+      players.forEach(savePlayerProgress); // todo: move this somewhere else
       state.players = players;
     },
     setPlayerInfo: (state, action: PayloadAction<{ index: number, overrides: Partial<Player> }>) => {

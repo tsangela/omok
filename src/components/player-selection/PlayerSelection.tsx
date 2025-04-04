@@ -37,10 +37,8 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
     return Messages.player(n);
   }, [playerIndex]);
 
-  const otherPlayerPieces = useMemo(() =>
-    players.filter(p => p.index !== playerIndex).map(p => p.piece).filter(p => !!p),
-    [playerIndex]
-  );
+  // todo: useMemo uses old players state
+  const otherPlayerPieces = players.filter(p => p.index !== playerIndex).map(p => p.piece).filter(p => !!p);
 
   const isNicknameTaken = () => players
     .filter((_, i) => i !== playerIndex)
@@ -64,7 +62,6 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
 
     return true;
   }
-
 
   // Save player selection to redux store
   const savePlayerSelections = () => {
@@ -92,8 +89,10 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
       return;
     }
 
-    // Save selections and go to previous player
+    // Save selections
     savePlayerSelections();
+
+    // Previous player
     populateFields(playerIndex - 1);
   }
 
@@ -102,17 +101,15 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
       return;
     }
 
-    // Load player progress from local storage if any
+    // Save selections
     savePlayerSelections();
 
-    if (playerIndex === players.length - 1) {
+    if (playerIndex < players.length - 1) {
+      // Go to next player
+      populateFields(playerIndex + 1);
+    } else {
       onDone();
-      return;
     }
-  
-    // Save selections and go to next player
-    savePlayerSelections();
-    populateFields(playerIndex + 1);
   }
 
   return (

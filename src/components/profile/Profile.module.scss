@@ -108,12 +108,13 @@ $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
   position: absolute;
   bottom: 0;
 
-  font-family: "Sigmar One", sans-serif;
-  font-size: 34px;
+  font-family: base.$font-titan;
+  font-size: 36px;
   letter-spacing: -4px;
+  margin-bottom: base.$spacing-24;
 
   transition: transform 0.4s ease-out;
-  transform: translateY(12px);
+  transform: translateY(base.$spacing-24 + base.$spacing-4);
 
   > span {
     position: relative;
@@ -130,7 +131,7 @@ $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
       left: 0;
       z-index: -1;
 
-      -webkit-text-stroke: 8px base.$color-black;
+      -webkit-text-stroke: 8px base.$color-darkgrey;
     }
 
     &:after {
@@ -160,7 +161,7 @@ $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        opacity: 0.3;
+        opacity: 0.4;
       }
     }
   }

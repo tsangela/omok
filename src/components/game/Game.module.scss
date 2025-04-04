@@ -21,7 +21,7 @@ $text-shadow-offset: 6px;
   // text-stroke: $text-stroke base.$color-text-dark;
   // text-shadow: -$text-shadow-offset $text-shadow-offset 0 base.$color-bluegrey;
 
-  color: white;
+  color: base.$color-white;
   -webkit-text-stroke: $text-stroke base.$color-bluegrey;
   text-stroke: $text-stroke base.$color-bluegrey;
   text-shadow: -$text-shadow-offset $text-shadow-offset 0 base.$color-bluegrey;  

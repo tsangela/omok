@@ -20,7 +20,7 @@ $text-stroke: 8px;
   line-height: 10rem;
   text-align: center;
 
-  color: white;
+  color: base.$color-white;
   -webkit-text-stroke: $text-stroke base.$color-text-dark;
   text-stroke: $text-stroke base.$color-text-dark;
 }
@@ -29,7 +29,7 @@ $text-stroke: 8px;
   margin: 0;
   padding: base.$spacing-8;
   font-size: large;
-  background: white;
+  background: base.$color-white;
   color: base.$color-text-dark;
 }
 
@@ -43,10 +43,10 @@ $text-stroke: 8px;
 
   font-size: 2rem;
   background: base.$color-text-dark;
-  color: white;
+  color: base.$color-white;
   text-decoration: none;
   &:active, &:visited {
-    color: white;
+    color: base.$color-white;
   }
 
   transition: transform base.$transition;

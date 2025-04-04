@@ -53,7 +53,7 @@ $tooltip-offset: $icon-width + $icon-margin;
     width: $tooltip-width;
     padding: $tooltip-padding;
     background: base.$color-text-dark;
-    color: white;
+    color: base.$color-white;
     text-align: left;
 
     &.top {

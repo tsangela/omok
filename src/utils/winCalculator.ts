@@ -1,4 +1,4 @@
-import { BOARD_SIZE, COLUMN_SIZE, ROW_SIZE, WIN_CONDITION_LENGTH } from "./constants";
+import { BASE_POINTS, BOARD_SIZE, COLUMN_SIZE, ROW_SIZE, WIN_CONDITION_LENGTH } from "./constants";
 import { OmokPieceType, PointMultiplier, ScoreType } from "./enums";
 import { BoardValue, RawScore, Score } from "./types";
 
@@ -88,7 +88,7 @@ function calculatePoints(score: Score) {
     const { win, loss, tie } = score;
     const numerator = (win * PointMultiplier.Win) + (loss * PointMultiplier.Loss) + (tie * PointMultiplier.Tie)
     const denominator = (win + loss + tie) * PointMultiplier.Win;
-    return Math.floor(numerator / denominator) * 100;
+    return BASE_POINTS + Math.floor(numerator / denominator) * 100;
 }
 
 export const calculateScore = (score: RawScore<Score>, scoreType: RawScore<ScoreType>): Score => {
