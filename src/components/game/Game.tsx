@@ -73,7 +73,7 @@ export default function Game() {
     <>
       <style>{`body{background:#e8f5ff;}`}</style>
       <div className={styles.container}>
-        <Link to={Path.Root} className={styles.header} /*onClick={() => dispatch(clearGame())}*/>
+        <Link to={Path.Root} className={styles.header}>
           <h1>{Messages.omokTitle}</h1>
         </Link>
         {showBoard

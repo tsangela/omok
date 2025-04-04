@@ -23,6 +23,9 @@ $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
   -moz-box-shadow: inset $box-shadow;
   box-shadow: $box-shadow;
 
+  width: $character-image-width;
+  height: $character-image-width;
+
   img {
     image-rendering: pixelated;
   }
