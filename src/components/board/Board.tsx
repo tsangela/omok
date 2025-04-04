@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
+
 import { incrementTurn, selectPlayers, selectTurn, setPlayerScore } from "../../store/gameSlice";
 import Messages from "../../utils/messages";
 import { BOARD_SIZE } from "../../utils/constants";
@@ -8,6 +9,7 @@ import { useAppDispatch } from "../../utils/hooks";
 import { BoardValue, Player } from "../../utils/types";
 import { inBound, nextTurn } from "../../utils/validation";
 import { calculateScore, isWinner } from "../../utils/winCalculator";
+
 import { BoardTile, PreviewTile } from "../tile/Tile";
 
 import styles from "./Board.module.scss";
@@ -104,11 +106,9 @@ function WinnerScreen({ clearBoard, winner }: WinnerScreenProps) {
         <span className={styles.name}>{winner.name}</span>
         <span className={styles.wins}>{Messages.wins}</span>
       </div>
-      <div className={styles.rematchButton}>
-        <button onClick={clearBoard}>
-          {Messages.rematch}
-        </button>
-      </div>
+      <button className={styles.rematchButton} onClick={clearBoard}>
+        {Messages.rematch}
+      </button>
     </div>
   )
 }

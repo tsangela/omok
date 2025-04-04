@@ -13,6 +13,7 @@ $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
 }
 
 .character {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -77,9 +78,9 @@ $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
       grid-area: 1 / 1 / span 3 / auto;
       justify-self: start;
       align-self: start;
+      display: inline-flex;
 
-      &:after {
-        content: "\2192"; // Rightwards arrow →
+      svg {
         font-family: monospace;
         color: base.$color-maplestory;
       }
@@ -101,4 +102,66 @@ $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
   position: absolute;
   left: base.$spacing-4;
   bottom: base.$spacing-4;
+}
+
+.status {
+  position: absolute;
+  bottom: 0;
+
+  font-family: "Sigmar One", sans-serif;
+  font-size: 34px;
+  letter-spacing: -4px;
+
+  transition: transform 0.4s ease-out;
+  transform: translateY(12px);
+
+  > span {
+    position: relative;
+    z-index: 0;
+
+    background-image: linear-gradient(to right, #00aaff, #0010ce);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    &:before {
+      content: attr(data-text);
+      position: absolute;
+      left: 0;
+      z-index: -1;
+
+      -webkit-text-stroke: 8px base.$color-black;
+    }
+
+    &:after {
+      content: attr(data-text);
+      position: absolute;
+      left: 0;
+      z-index: -2;
+
+      -webkit-text-stroke: 12px white;
+    }
+
+    > span {
+      &:before {
+        content: attr(data-text);
+        position: absolute;
+        left: 0;
+        z-index: 1;
+
+        background-image: linear-gradient(
+          -70deg, 
+          #fff, transparent,
+          #fff, transparent,
+          #fff, transparent,
+          #fff, transparent,
+          #fff, transparent,
+        );
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        opacity: 0.3;
+      }
+    }
+  }
 }

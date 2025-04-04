@@ -34,6 +34,7 @@ const misc = {
   player: (index: number) => `Player ${index}`,
   winner: (name: string) => `${name} won!`,
   wins: 'wins',
+  lose: 'LOSE',
 };
 
 const Messages = {

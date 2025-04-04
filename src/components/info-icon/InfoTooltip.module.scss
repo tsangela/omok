@@ -22,10 +22,9 @@ $tooltip-offset: $icon-width + $icon-margin;
     width: $icon-width;
     height: $icon-width;
   
-    box-sizing: border-box;
     border-radius: 100%;
-    border: 1px solid base.$color-text-dark;
-    color: base.$color-text-dark;
+    color: base.$color-bluegrey;
+    opacity: 0.5;
   
     -webkit-touch-callout: none; /* iOS Safari */
       -webkit-user-select: none; /* Safari */
@@ -34,12 +33,8 @@ $tooltip-offset: $icon-width + $icon-margin;
           -ms-user-select: none; /* Internet Explorer/Edge */
               user-select: none; /* Non-prefixed version, currently
                                     supported by Chrome, Edge, Opera and Firefox */
-  
-    &:after {
-      content: "i";
-    }
-
     &:hover, &:focus {
+      opacity: 1;
       border-color: base.$color-pinkteddy;
       color: base.$color-pinkteddy;
       outline-color: base.$color-pinkteddy;
@@ -53,16 +48,32 @@ $tooltip-offset: $icon-width + $icon-margin;
   .tooltipText {
     position: absolute;
     z-index: 1;
-    top: -$tooltip-padding;
-    right: $tooltip-offset;
-    text-align: left;
-
+    visibility: hidden;
+  
     width: $tooltip-width;
     padding: $tooltip-padding;
-
     background: base.$color-text-dark;
     color: white;
+    text-align: left;
 
-    visibility: hidden;
+    &.top {
+      bottom: $tooltip-offset;
+      left: 0;
+    }
+
+    &.bottom {
+      top: $tooltip-offset;
+      left: 0;
+    }
+
+    &.left {
+      top: -$tooltip-padding;
+      right: $tooltip-offset;
+    }
+
+    &.right {
+      top: -$tooltip-padding;
+      left: $tooltip-offset;
+    }
   }
 }

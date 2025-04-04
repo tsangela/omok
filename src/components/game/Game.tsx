@@ -1,18 +1,22 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "../../utils/hooks";
+import { Link } from "react-router-dom";
+
 import { getEars, getFaces, getHairs, getSkins } from "../../api/character";
 import { setEars, setEarsFetchStatus, setFaces, setFacesFetchStatus, setHairs, setHairsFetchStatus, setSkins, setSkinsFetchStatus } from "../../store/assetsSlice";
-import { selectPlayers } from "../../store/gameSlice";
-import { PlayerSelection } from "../player-selection/PlayerSelection";
+import { selectPlayers, setPlayerInfo } from "../../store/gameSlice";
+
+import { AssetType } from "../../utils/enums";
+import { useAppDispatch } from "../../utils/hooks";
+import { loadPlayerProgress } from "../../utils/localStorage";
+import Messages from "../../utils/messages";
+import Path from "../../utils/path";
+
 import { Board } from "../board/Board";
+import { PlayerSelection } from "../player-selection/PlayerSelection";
 import { Profile } from "../profile/Profile";
 
 import styles from "./Game.module.scss";
-import { AssetType } from "../../utils/enums";
-import Messages from "../../utils/messages";
-import { Link } from "react-router-dom";
-import Path from "../../utils/path";
 
 const assetOperations = {
   [AssetType.Ear]: {
@@ -55,6 +59,16 @@ export default function Game() {
     [AssetType.Ear, AssetType.Face, AssetType.Hair, AssetType.Skin].forEach(type => fetchAsset(type));
   }, []);
 
+  function startGame() {
+    players.forEach(p => {
+      const playerData = loadPlayerProgress(p.name);
+      if (playerData) {
+        dispatch(setPlayerInfo({ index: p.index, overrides: playerData }));
+      }
+    });
+    setShowBoard(true);
+  }
+
   return (
     <>
       <style>{`body{background:#e8f5ff;}`}</style>
@@ -73,7 +87,7 @@ export default function Game() {
               <Board winnerIndex={winnerIndex} setWinnerIndex={setWinnerIndex} />
             </>
           )
-          : <PlayerSelection onDone={() => setShowBoard(true)} />
+          : <PlayerSelection onDone={startGame} />
         }        
       </div>
     </>

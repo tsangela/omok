@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "../../utils/hooks";
-import { selectTurn, setPlayerImageUrl } from "../../store/gameSlice";
+import { FiArrowRight } from "react-icons/fi";
+
+import { getCharacterImage, getRandomCharacterImage } from "../../api/character";
 import { selectEars, selectFaceIds, selectHairIds, selectSkins } from "../../store/assetsSlice";
+import { selectTurn, setPlayerImageUrl } from "../../store/gameSlice";
 import { classNames } from "../../utils/classNames";
 import { ScoreType } from "../../utils/enums";
+import { useAppDispatch } from "../../utils/hooks";
 import Messages from "../../utils/messages";
 import { Player, Score } from "../../utils/types";
-import { getCharacterImage, getRandomCharacterImage } from "../../api/character";
+import { isNexonHostedImageUrl } from "../../utils/validation";
+
+import { OmokPiece } from "../omok-piece/OmokPiece";
 import { Spinner } from "../spinner/Spinner";
 
 import styles from "./Profile.module.scss";
-import { isNexonHostedImageUrl } from "../../utils/validation";
-import { OmokPiece } from "../omok-piece/OmokPiece";
 
 type ProfileProps = {
   index: number;
@@ -48,13 +51,20 @@ export function Profile({ index, player, winnerIndex }: ProfileProps) {
     }
   }, []);
 
+  const isWinner = index === winnerIndex;
+  const isLoser = winnerIndex !== undefined && !isWinner;
+
   return (
     <div className={classNames(
       styles.card,
-      turn === index && styles.highlight,
-      turn === winnerIndex && styles.winner,
+      index === turn && styles.highlight,
+      isWinner && styles.winner,
     )}>
-      <ProfileImage src={characterImageUrl} loading={loading} />
+      <ProfileImage 
+        src={characterImageUrl} 
+        loading={loading}
+        isLoser={isLoser}
+      />
       <ProfileName name={name} />
       <ProfileStats score={score} />
       {player.piece && (
@@ -64,17 +74,18 @@ export function Profile({ index, player, winnerIndex }: ProfileProps) {
   );
 }
 
-function ProfileImage({ src, loading }: { src?: string; loading: boolean; }) {
+function ProfileImage({ src, loading, isLoser }: { src?: string, loading: boolean, isLoser: boolean }) {
   return (
     <div className={styles.character}>
       {loading 
         ? <Spinner />
         : src && <img src={src} alt="character" />}
+      {isLoser && <LoseStatus />}
     </div>
   )
 }
 
-function ProfileName({ name }: { name: string; }) {
+function ProfileName({ name }: { name: string }) {
   return (
     <span className={styles.name}>{name}</span>
   )
@@ -89,7 +100,10 @@ function ProfileStats({ score } : { score: Score }) {
         <Stat id={ScoreType.Point} value={points} />
       </div>
       <div className={styles.statsRow}>
-        <span id="total" className={styles.label}>{Messages.total}</span>
+        <span id="total" className={styles.label}>
+          {Messages.total}
+          <FiArrowRight />
+        </span>
         <Stat id={ScoreType.Win} value={win} />
         <Stat id={ScoreType.Loss} value={loss} />
         <Stat id={ScoreType.Tie} value={tie} />
@@ -114,3 +128,14 @@ const statLabels: { [id: string]: string } = {
   [ScoreType.Loss]: Messages.lost,
   [ScoreType.Tie]: Messages.tied,
 };
+
+function LoseStatus() {
+  return (
+    <div className={styles.status}>
+      <span data-text={Messages.lose}>
+        {Messages.lose}
+        <span data-text={Messages.lose}/>
+      </span>
+    </div>
+  )
+}

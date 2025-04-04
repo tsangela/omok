@@ -18,7 +18,7 @@
 
 .omokPiecesContainer {
   display: grid;
-  grid-gap: base.$spacing-8;
+  grid-gap: base.$spacing-16;
   grid-template-columns: repeat(4, 1fr);
 }
 
@@ -59,7 +59,7 @@ $input-padding: base.$spacing-4;
 $input-border-width: 3px;
 $input-height: $input-line-height + $input-padding * 2 + $input-border-width * 2;
 
-.inputRow {
+.row {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -69,11 +69,11 @@ $input-height: $input-line-height + $input-padding * 2 + $input-border-width * 2
 
 .inputGroup {
   position: relative;
-  display: inline-block;
-  width: 100%;
+  display: inline-flex;
   flex-grow: 1;
 
   input {
+    width: 100%;
     border-radius: 100px;
     border: none;
     outline: none;
@@ -92,21 +92,30 @@ $input-height: $input-line-height + $input-padding * 2 + $input-border-width * 2
   }
   
   .inputWarning {
+    display: none;
     position: absolute;
     top: $input-height;
     margin-top: base.$spacing-4;
 
     color: base.$color-red;
     font-size: small;
+
+    &.show {
+      display: grid;
+      grid-template-columns: auto 1fr;
+    }
   
     > span {
+      margin-left: base.$spacing-4;
       word-wrap: break-word;
       white-space: break-spaces;
-
-      &:before {
-        content: "\26A0\00A0"; // Warning sign ⚠
-      }
     }
+  }
+
+  .inputInfo {
+    position: absolute;
+    right: base.$spacing-6;
+    margin: base.$spacing-4 0;
   }
 }
 
@@ -115,17 +124,19 @@ $input-height: $input-line-height + $input-padding * 2 + $input-border-width * 2
   justify-content: center;
   align-items: center;
   height: base.$input-height;
-  padding: 0 base.$spacing-16;
+  padding: base.$spacing-8 base.$spacing-12;
   border-radius: 100px;
   border: none;
   font-size: large;
 
-  // background-image: linear-gradient(to right, base.$color-pinkteddy, base.$color-bloctopus);
-  background: base.$color-bluegrey;
-  color: white;
+  &:not(:disabled) {
+    // background-image: linear-gradient(to right, base.$color-pinkteddy, base.$color-bloctopus);
+    background: base.$color-bluegrey;
+    color: white;
     
-  &:hover, &:focus-visible {
-    outline: none;
-    background: base.$color-pinkteddy;
+    &:hover, &:focus-visible {
+      outline: none;
+      background: base.$color-pinkteddy;
+    }
   }
 }

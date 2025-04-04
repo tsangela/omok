@@ -1,14 +1,14 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from './store'
 import { Player, Players, Score } from '../utils/types'
-import { OmokPieceType, ScoreType } from '../utils/enums'
-import { OmokPieces } from '../api/omok';
+import { ScoreType } from '../utils/enums'
 import { nextTurn } from '../utils/validation';
 import { savePlayerProgress } from '../utils/localStorage';
 
 interface GameState {
   players: Players;
   turn: number; // todo: rename to turnIndex?
+  winnerIndex: number | undefined; // todo: delete?
 };
 
 const buildPlayer = (index: number): Player => ({
@@ -26,6 +26,7 @@ const buildPlayer = (index: number): Player => ({
 const initialState: GameState = {
   players: [buildPlayer(0), buildPlayer(1)],
   turn: 0,
+  winnerIndex: undefined,
 };
 
 export const gameSlice = createSlice({
@@ -36,12 +37,6 @@ export const gameSlice = createSlice({
     incrementTurn: (state) => {
       state.turn = nextTurn(state.turn);
     },
-    setPlayer: (state, action: PayloadAction<{ index: number, player: Player }>) => {
-      const { players } = state;
-      const { index, player } = action.payload;
-      players[index] = player;
-      state.players = players;
-    },
     setPlayerImageUrl: (state, action: PayloadAction<{ index: number, imageUrl: string }>) => {
       const { players } = state;
       const { index, imageUrl } = action.payload;
@@ -50,17 +45,6 @@ export const gameSlice = createSlice({
         return;
       }
       players[index].imageUrl = imageUrl;
-      state.players = players;
-    },
-    setPlayerPiece: (state, action: PayloadAction<{ index: number, piece: OmokPieceType }>) => {
-      const { players } = state;
-      const { index, piece } = action.payload;
-      if (!players[index]) {
-        console.error(`No player found at index ${index}`);
-        return;
-      }
-      players[index].piece = piece;
-      players[index].name = OmokPieces[piece].name;
       state.players = players;
     },
     setPlayerScore: (state, action: PayloadAction<{ index: number, score: Score }>) => {
@@ -87,21 +71,26 @@ export const gameSlice = createSlice({
       };
       state.players = players;
     },
+    setWinnerIndex: (state, action: PayloadAction<number>) => {
+      state.winnerIndex = action.payload;
+    },
   },
 });
 
 export const {
   clearGame,
   incrementTurn,
-  // setPlayer, // todo: delete
   setPlayerImageUrl,
-  // setPlayerPiece, // todo: delete
-  setPlayerScore,
   setPlayerInfo,
+  setPlayerScore,
+  setWinnerIndex,
 } = gameSlice.actions;
 
 export const selectTurn = (state: RootState) => state.game.turn;
 export const selectPlayers = (state: RootState) => state.game.players;
+export const selectWinnerIndex = (state: RootState) => state.game.winnerIndex;
+
 export const selectCurrentPlayer = createSelector([selectPlayers, selectTurn], (players, index) => players[index]);
+export const selectWinner = createSelector([selectPlayers, selectWinnerIndex], (players, index) => index ? players[index] : undefined);
 
 export default gameSlice.reducer;

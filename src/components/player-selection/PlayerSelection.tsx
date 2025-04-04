@@ -1,12 +1,11 @@
-import { ButtonHTMLAttributes, useEffect, useState } from "react";
+import { ButtonHTMLAttributes, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
+import { FiAlertTriangle, FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import { clearGame, selectPlayers, setPlayerInfo } from "../../store/gameSlice";
 import { classNames } from "../../utils/classNames";
 import { MAX_NICKNAME_CHAR_LENGTH } from "../../utils/constants";
 import { OmokPieceType } from "../../utils/enums";
 import { useAppDispatch } from "../../utils/hooks";
-import { loadPlayerProgress } from "../../utils/localStorage";
 import Messages from "../../utils/messages";
 import { OmokPieces } from "../../api/omok";
 import { InfoTooltip } from "../info-icon/InfoTooltip";
@@ -28,9 +27,20 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
   const [playerIndex, setPlayerIndex] = useState(0);
   const [warning, setWarning] = useState('');
 
+  // Always start with an empty player selection 
   useEffect(() => {
     dispatch(clearGame());
   }, []);
+
+  const nthPlayer = useMemo(() => {
+    const n = playerIndex + 1;
+    return Messages.player(n);
+  }, [playerIndex]);
+
+  const otherPlayerPieces = useMemo(() =>
+    players.filter(p => p.index !== playerIndex).map(p => p.piece).filter(p => !!p),
+    [playerIndex]
+  );
 
   const isNicknameTaken = () => players
     .filter((_, i) => i !== playerIndex)
@@ -55,21 +65,36 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
     return true;
   }
 
-  const loadPlayer = (playerIndex: number) => {
-    const player = players[playerIndex];
-    setPlayerIndex(playerIndex);
+
+  // Save player selection to redux store
+  const savePlayerSelections = () => {
+    dispatch(setPlayerInfo({
+      index: playerIndex,
+      overrides: {
+        name: nickname,
+        piece: piece,
+      },
+    }));
+  };
+
+  // Load player selection from redux store
+  const populateFields = (index: number) => {
+    const player = players[index];
+    setPlayerIndex(index);
     setPiece(player.piece);
     setNickname(player.name);
     setWarning('');
   }
   
   const back = () => {
+    // Button is only rendered when player index > 0
     if (playerIndex === 0) {
       return;
     }
 
-    // Previous player
-    loadPlayer(playerIndex - 1);
+    // Save selections and go to previous player
+    savePlayerSelections();
+    populateFields(playerIndex - 1);
   }
 
   const next = () => {
@@ -77,38 +102,30 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
       return;
     }
 
-    const playerData = loadPlayerProgress(nickname) ?? {};
-    dispatch(setPlayerInfo({
-      index: playerIndex,
-      overrides: {
-        ...playerData,
-        name: nickname,
-        piece: piece,
-      },
-    }));
+    // Load player progress from local storage if any
+    savePlayerSelections();
 
     if (playerIndex === players.length - 1) {
       onDone();
       return;
     }
   
-    // Next player
-    loadPlayer(playerIndex + 1);
+    // Save selections and go to next player
+    savePlayerSelections();
+    populateFields(playerIndex + 1);
   }
-  
-  const selectedPieces = players.map(p => p.piece).filter(p => !!p);
-  const n = playerIndex + 1;
-  const nthPlayer = Messages.player(n);
 
   return (
     <div className={styles.selectionContainer}>
       <h1 className={styles.title}>{nthPlayer}</h1>
-      <OmokPieceSelection piece={piece} setPiece={setPiece} selectedPieces={selectedPieces} />
-      <div className={styles.inputRow}>
+      <OmokPieceSelection piece={piece} setPiece={setPiece} otherPlayerPieces={otherPlayerPieces} />
+      <div className={styles.row}>
+        {playerIndex > 0 && (
+          <IconButton onClick={back} title={Messages.back}>
+            <FiArrowLeft />
+          </IconButton>
+        )}
         <NicknameInput nickname={nickname} setNickname={setNickname} placeholder={nthPlayer} warning={warning} />
-        <IconButton onClick={back} title={Messages.back}>
-          <FiArrowLeft />
-        </IconButton>
         <IconButton onClick={next} title={Messages.next}>
           <FiArrowRight />
         </IconButton>
@@ -118,18 +135,18 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
 }
 
 type OmokPieceSelectionProps = {
+  otherPlayerPieces: OmokPieceType[];
   piece: OmokPieceType | undefined;
   setPiece: (type?: OmokPieceType) => void;
-  selectedPieces: OmokPieceType[];
 };
 
-function OmokPieceSelection({ piece, setPiece, selectedPieces }: OmokPieceSelectionProps) {
+function OmokPieceSelection({ otherPlayerPieces, piece, setPiece }: OmokPieceSelectionProps) {
   return (
     <div className={styles.omokPiecesContainer}>
       {Object.values(OmokPieceType)
         .map((type, i) => {
             const selected = type === piece;
-            const disabled = type !== piece && selectedPieces.includes(type);
+            const disabled = !selected && otherPlayerPieces.includes(type);
             return (
               <button
                 key={`omok-piece_${i}`}
@@ -162,7 +179,6 @@ function NicknameInput({ nickname, setNickname, placeholder, warning }: Nickname
   const inputName = "Nickname";
   return (
     <>
-      <InfoTooltip id={tooltipId} message={Messages.playerNicknameHelp} subject={inputName} />
       <div className={styles.inputGroup}>
         <input
           name={inputName}
@@ -172,9 +188,11 @@ function NicknameInput({ nickname, setNickname, placeholder, warning }: Nickname
           value={nickname}
           maxLength={MAX_NICKNAME_CHAR_LENGTH}
         />
-        <div className={classNames(warning && styles.inputWarning)}>
+        <div className={classNames(styles.inputWarning, warning && styles.show)}>
+          <FiAlertTriangle />
           <span>{warning}</span>
         </div>
+        <InfoTooltip id={tooltipId} className={styles.inputInfo} message={Messages.playerNicknameHelp} subject={inputName} />
       </div>
     </>
   )
