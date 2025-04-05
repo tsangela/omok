@@ -25,3 +25,6 @@ dist-ssr
 
 # Python
 __pycache__
+
+# Environment
+*.env*

@@ -101,10 +101,7 @@ export async function getCharacterImage(name: string) {
     throw new Error(`Cannot search for character '${name}'`);
   }
 
-  // const requestUrl = `https://www.nexon.com/api/maplestory/no-auth/ranking/v2/na?type=overall&id=weekly&character_name=${name}`
-  // const requestUrl = `http://localhost:5000/${name}`
-  const requestUrl = `/api/maplestory/no-auth/ranking/v2/na?type=overall&id=weekly&character_name=${name}`
-  
+  const requestUrl = `/api/rank/${name}`
   try {
     const response = await fetch(requestUrl,{
       method: 'GET',
