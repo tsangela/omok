@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { FiArrowRight } from "react-icons/fi";
 
-import { getCharacterImage, getRandomCharacterImage } from "../../api/character";
+import { getCharacterData, getRandomCharacterImage } from "../../api/character";
 import { selectEars, selectFaceIds, selectHairIds, selectSkins } from "../../store/assetsSlice";
 import { selectTurn, setPlayerImageUrl } from "../../store/gameSlice";
 import { classNames } from "../../utils/classNames";
@@ -39,8 +39,8 @@ export function Profile({ index, player, winnerIndex }: ProfileProps) {
   useEffect(() => {
     if (!isNexonHostedImageUrl(player.imageUrl)) {
       setLoading(true);
-      getCharacterImage(player.name)
-        .then(setCharacterImageUrl)
+      getCharacterData(player.name)
+        .then(data => setCharacterImageUrl(data.characterImgURL))
         .catch(() => 
           getRandomCharacterImage(ears, faces, hairs, skins)
             .then(url => {

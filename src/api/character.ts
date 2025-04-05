@@ -1,7 +1,7 @@
 import skinsData from "./data/skins.json";
 import earsData from "./data/ears.json";
 import { buildRequestUrl, Endpoint, Method, random } from "./apiUtils";
-import { Ear, Face, Hair, Id, Skin } from "../utils/types";
+import { CharacterData, Ear, Face, Hair, Id, Skin } from "../utils/types";
 import { PLACEHOLDER_CHARACTER_IMAGE } from "../utils/constants";
 
 type Response<T> = { result: T };
@@ -90,22 +90,17 @@ export async function getRandomCharacterImage(
 }
 
 type CharacterRankResponse = {
-  ranks: {
-    characterName: string,
-    characterImgURL: string,
-  }[],
+  totalCount: number;
+  ranks: CharacterData[],
 }
 
-export async function getCharacterImage(name: string) {
+export async function getCharacterData(name: string) {
   if (!name) {
     throw new Error(`Cannot search for character '${name}'`);
   }
 
-  // const requestUrl = `https://www.nexon.com/api/maplestory/no-auth/ranking/v2/na?type=overall&id=weekly&character_name=${name}`
-  // const requestUrl = `http://localhost:5000/${name}`
-  const requestUrl = `/api/maplestory/no-auth/ranking/v2/na?type=overall&id=weekly&character_name=${name}`
-  
   try {
+    const requestUrl = `${import.meta.env.VITE_API_HOST}/${name}`;
     const response = await fetch(requestUrl,{
       method: 'GET',
       headers: {
@@ -116,10 +111,12 @@ export async function getCharacterImage(name: string) {
       throw new Error(`Request response not ok: ${response.status}`);
     }
     const data: CharacterRankResponse = await response.json();
-    console.log(data); // todo: delete
-    return data.ranks[0].characterImgURL;
+    if (data.totalCount < 1) {
+      throw new Error(`Found ${data.totalCount} results for ${name}`);
+    }
+    return data.ranks[0];
   } catch (error) {
-    console.error(`Failed to fetch character image for ${name}.`, error);
+    console.error(`Failed to fetch character data for ${name}.`, error);
     throw error;
   }
 }

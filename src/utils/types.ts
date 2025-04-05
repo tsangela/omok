@@ -42,3 +42,8 @@ export type Player = {
 export type Players = [p1: Player, p2: Player];
 
 export type BoardValue = OmokPieceType | undefined;
+
+export type CharacterData = {
+  characterName: string;
+  characterImgURL: string;
+}
