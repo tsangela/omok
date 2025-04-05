@@ -1,5 +1,4 @@
 import express from 'express';
-import itemRoutes from './routes/itemRoutes';
 import rankRoutes from './routes/rankRoutes';
 import { errorHandler } from './middlewares/errorHandler';
 
@@ -9,7 +8,6 @@ app.use(express.json());
 
 // Routes
 app.use('/api/rank', rankRoutes);
-app.use('/api/items', itemRoutes);
 
 // Global error handler (should be after routes)
 app.use(errorHandler);
