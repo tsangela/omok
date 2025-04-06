@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 
-import { incrementTurn, selectPlayers, selectTurnIndex, setPlayerScore, setTurnIndex } from "../../store/gameSlice";
+import { incrementTurnIndex, selectPlayers, selectTurnIndex, setPlayerOverrides, setTurnIndex } from "../../store/gameSlice";
 import Messages from "../../utils/messages";
 import { BOARD_SIZE } from "../../utils/constants";
 import { ScoreType } from "../../utils/enums";
@@ -42,17 +42,17 @@ export function Board({ winnerIndex, setWinnerIndex }: BoardProps) {
 
     // Next player's turn
     if (!isWinner(i, values, piece)) {
-      dispatch(incrementTurn());
+      dispatch(incrementTurnIndex());
       return;
     }
 
     // Someone won
     const winnerScore = calculateScore(players[turnIndex].score, ScoreType.Win);
-    dispatch(setPlayerScore({ index: turnIndex, score: winnerScore }));
+    dispatch(setPlayerOverrides({ index: turnIndex, overrides: { score: winnerScore }, save: true }));
 
     const loserIndex = nextTurnIndex(turnIndex);
     const loserScore = calculateScore(players[loserIndex].score, ScoreType.Loss);
-    dispatch(setPlayerScore({ index: loserIndex, score: loserScore }));
+    dispatch(setPlayerOverrides({ index: loserIndex, overrides: { score: loserScore }, save: true }));
 
     setWinnerIndex(turnIndex);
   }

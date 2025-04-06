@@ -38,9 +38,6 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
     return Messages.player(n);
   }, [playerIndex]);
 
-  // todo: useMemo uses old players state
-  // const otherPlayerPieces = players.filter(p => p.index !== playerIndex).map(p => p.piece).filter(p => !!p);
-  // todo: could just be 1 piece... of the other player..
   const otherPlayerPieces = useMemo(() =>
     players.filter(p => p.index !== playerIndex).map(p => p.piece).filter(p => !!p),
     [players, playerIndex],
@@ -71,11 +68,6 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
 
   // Save player selection to redux store
   const savePlayerSelections = (index: number, name: string, piece?: OmokPieceType) => {
-    // console.log('savePlayerSelections:', players, index, piece);
-    // const updatedPlayers = [...players] as Players;
-    // updatedPlayers[index].piece = piece;
-    // updatedPlayers[index].name = name;
-    // setPlayers(updatedPlayers);
     const profile = loadPlayerProgress(name) ?? {};
     dispatch(setPlayerOverrides({
       index,
@@ -119,11 +111,6 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
       return;
     }
 
-    done();
-  }
-
-  const done = () => {
-    // dispatch(initializePlayers(players));
     onDone();
   }
 

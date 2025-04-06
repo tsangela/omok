@@ -1,13 +1,14 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from './store'
-import { Player, PlayerData, PlayerProfile, Players, Score } from '../utils/types'
-import { OmokPieceType, ScoreType } from '../utils/enums'
+import { BASE_POINTS } from '../utils/constants';
+import { ScoreType } from '../utils/enums'
+import { savePlayerProgress } from '../utils/localStorage';
+import { Player, Players } from '../utils/types'
 import { nextTurnIndex } from '../utils/validation';
-import { loadPlayerProgress, savePlayerProgress } from '../utils/localStorage';
 
 interface GameState {
   players: Players;
-  turnIndex: number; // todo: rename to turnIndex?
+  turnIndex: number;
 };
 
 export const basePlayer = (index: number): Player => ({
@@ -15,7 +16,7 @@ export const basePlayer = (index: number): Player => ({
   name: '',
   imageUrl: '',
   score: {
-    [ScoreType.Point]: 0,
+    [ScoreType.Point]: BASE_POINTS,
     [ScoreType.Win]: 0,
     [ScoreType.Loss]: 0,
     [ScoreType.Tie]: 0,
@@ -33,55 +34,27 @@ export const gameSlice = createSlice({
   reducers: {
     clearGame: () => initialState,
 
-    incrementTurn: (state) => {
+    incrementTurnIndex: (state) => {
       state.turnIndex = nextTurnIndex(state.turnIndex);
     },
 
-    initializePlayers: (state, action: PayloadAction<Players>) => {
-      const players = action.payload;
-      state.players = players.map((p) => ({
-        ...p,
-        ...loadPlayerProgress(p.name),
-      })) as Players;
-    },
-
-    setPlayerOverrides: (state, action: PayloadAction<{ index: number, overrides: Partial<Player> }>) => {
+    setPlayerOverrides: (state, action: PayloadAction<{ index: number, overrides: Partial<Player>, save?: boolean }>) => {
       const { players } = state;
-      const { index, overrides } = action.payload;
+      const { index, overrides, save } = action.payload;
       if (!players[index]) {
         console.error(`No player found at index ${index}`);
         return;
       }
+
       players[index] = {
         ...players[index],
         ...overrides,
       };
-      state.players = players;
-    },
 
-    setPlayerProfile: (state, action: PayloadAction<{ index: number, profile: PlayerProfile }>) => {
-      const { players } = state;
-      const { index, profile } = action.payload;
-      if (!players[index]) {
-        console.error(`No player found at index ${index}`);
-        return;
+      if (save) {
+        players.forEach(savePlayerProgress); // todo: move this somewhere else
       }
-      players[index] = {
-        ...players[index],
-        ...profile,
-      };
-      state.players = players;
-    },
 
-    setPlayerScore: (state, action: PayloadAction<{ index: number, score: Score }>) => {
-      const { players } = state;
-      const { index, score } = action.payload;
-      if (!players[index]) {
-        console.error(`No player found at index ${index}`);
-        return;
-      }
-      players[index].score = score;
-      players.forEach(savePlayerProgress); // todo: move this somewhere else
       state.players = players;
     },
 
@@ -93,11 +66,8 @@ export const gameSlice = createSlice({
 
 export const {
   clearGame,
-  incrementTurn,
-  initializePlayers,
+  incrementTurnIndex,
   setPlayerOverrides,
-  setPlayerProfile,
-  setPlayerScore,
   setTurnIndex,
 } = gameSlice.actions;
 

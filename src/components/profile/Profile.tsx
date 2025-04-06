@@ -10,12 +10,12 @@ import { ScoreType } from "../../utils/enums";
 import { useAppDispatch } from "../../utils/hooks";
 import Messages from "../../utils/messages";
 import { Player, Score } from "../../utils/types";
+import { isNexonHostedImageUrl } from "../../utils/validation";
 
 import { OmokPiece } from "../omok-piece/OmokPiece";
 import { Spinner } from "../spinner/Spinner";
 
 import styles from "./Profile.module.scss";
-import { isNexonHostedImageUrl } from "../../utils/validation";
 
 type ProfileProps = {
   index: number;
@@ -41,6 +41,7 @@ export function Profile({ index, player, winnerIndex }: ProfileProps) {
           dispatch(setPlayerOverrides({
             index: player.index,
             overrides: { name: data.characterName, imageUrl: data.characterImgURL, score },
+            save: true,
           }));
         })
         .catch(() => 
