@@ -66,10 +66,12 @@ export function Profile({ index, player, winnerIndex }: ProfileProps) {
       index === turnIndex && styles.highlight,
       isWinner && styles.winner,
     )}>
-      <ProfileImage 
-        src={imageUrl} 
+      <ProfileImage
+        src={imageUrl}
         loading={loading}
         isLoser={isLoser}
+        index={index}
+        name={name}
       />
       <ProfileName name={name} />
       <ProfileStats score={score} />
@@ -80,12 +82,24 @@ export function Profile({ index, player, winnerIndex }: ProfileProps) {
   );
 }
 
-function ProfileImage({ src, loading, isLoser }: { src?: string, loading: boolean, isLoser: boolean }) {
+function ProfileImage({
+  src,
+  loading,
+  isLoser,
+  index,
+  name,
+}: {
+  src?: string,
+  loading: boolean,
+  isLoser: boolean,
+  index: number,
+  name: string,
+}) {
   return (
     <div className={styles.character}>
       {loading 
         ? <Spinner />
-        : src && <img src={src} alt="character" />}
+        : src && <img src={src} alt={`Character image for ${name}`} className={index === 0 ? styles.flipped : ''} />}
       {isLoser && <LoseStatus />}
     </div>
   )

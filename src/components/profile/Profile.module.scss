@@ -28,6 +28,13 @@ $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
 
   img {
     image-rendering: pixelated;
+
+    &.flipped {
+      -webkit-transform: scale(-1, 1);
+      -moz-transform: scale(-1, 1);
+      -o-transform: scale(-1, 1);
+      transform: scale(-1, 1);
+    }
   }
 }
 

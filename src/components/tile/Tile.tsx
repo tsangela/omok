@@ -17,6 +17,7 @@ export function BoardTile({ value }: BoardTileProps) {
   return (
     <div className={classNames(styles.tile, styles.guideline)}>
       {value && <OmokPiece type={value} />}
+      <span />
     </div>
   );
 }
