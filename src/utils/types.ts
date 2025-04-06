@@ -49,8 +49,6 @@ export type Player = {
 
 export type PlayerSelections = Pick<Player, "name" | "piece">;
 
-export type PlayerProfile = Pick<Player, "name" | "imageUrl" | "score">;
-
 // Player fields that should be persisted between games 
 export type PlayerData = Partial<Pick<Player, "name" | "imageUrl" | "score">>;
 

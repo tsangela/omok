@@ -13,6 +13,7 @@ import { OmokPiece } from "../omok-piece/OmokPiece";
 
 import styles from "./PlayerSelection.module.scss";
 import { loadPlayerProgress } from "../../utils/localStorage";
+import { imageNeedsRefresh } from "../../utils/validation";
 
 type PlayerSelectionProps = {
   onDone: () => void;
@@ -68,10 +69,10 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
 
   // Save player selection to redux store
   const savePlayerSelections = (index: number, name: string, piece?: OmokPieceType) => {
-    const profile = loadPlayerProgress(name) ?? {};
+    const { timestamp, imageUrl, ...rest} = loadPlayerProgress(name) ?? {};
     dispatch(setPlayerOverrides({
       index,
-      overrides: { name, piece, ...profile },
+      overrides: { name, piece, ...rest, imageUrl: imageNeedsRefresh(timestamp) ? '' : imageUrl },
     }));
   };
 

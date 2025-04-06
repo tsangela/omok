@@ -1,10 +1,11 @@
-import { Player, PlayerProfile } from "./types"
+import { Player } from "./types"
 
 const STORAGE_KEY = "PLAYERS";
 
+type PlayerProfile = Pick<Player, "name" | "imageUrl" | "score"> & { timestamp: number };
 type PlayersCache = { [id: string]: PlayerProfile };
 
-const toPlayerProfile = ({ name, imageUrl, score }: Player): PlayerProfile => ({ name, imageUrl, score });
+const toPlayerProfile = ({ name, imageUrl, score }: Player): PlayerProfile => ({ name, imageUrl, score, timestamp: Date.now() });
 
 const key = (name: string) => name.toLowerCase();
 
