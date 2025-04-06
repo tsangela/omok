@@ -55,6 +55,7 @@ $tooltip-offset: $icon-width + $icon-margin;
     background: base.$color-text-dark;
     color: base.$color-white;
     text-align: left;
+    font-size: base.$font-size-small;
 
     &.top {
       bottom: $tooltip-offset;

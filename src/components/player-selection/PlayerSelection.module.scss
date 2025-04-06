@@ -54,9 +54,9 @@
   }
 }
 
-$input-line-height: base.$spacing-16;
+$input-line-height: base.$font-size-large;
 $input-padding: base.$spacing-4;
-$input-border-width: 3px;
+$input-border-width: 2px;
 $input-height: $input-line-height + $input-padding * 2 + $input-border-width * 2;
 
 .row {
@@ -77,7 +77,7 @@ $input-height: $input-line-height + $input-padding * 2 + $input-border-width * 2
     border-radius: 100px;
     border: none;
     outline: none;
-    border: 3px solid base.$color-bluegrey;
+    border: $input-border-width solid base.$color-bluegrey;
 
     &:focus-visible {
       border-color: base.$color-pinkteddy;
@@ -86,9 +86,10 @@ $input-height: $input-line-height + $input-padding * 2 + $input-border-width * 2
   
   input, input::placeholder {
     font-size: base.$font-size-large;
-    padding: base.$spacing-4;
+    // padding: $input-padding;
     line-height: $input-line-height;
     text-align: center;
+    height: $input-height;
   }
   
   .inputWarning {
@@ -115,7 +116,7 @@ $input-height: $input-line-height + $input-padding * 2 + $input-border-width * 2
   .inputInfo {
     position: absolute;
     right: base.$spacing-8;
-    margin: base.$spacing-6 0;
+    margin: 5px 0;
   }
 }
 
@@ -127,7 +128,7 @@ $input-height: $input-line-height + $input-padding * 2 + $input-border-width * 2
   padding: base.$spacing-8 base.$spacing-12;
   border-radius: 100px;
   border: none;
-  font-size: base.$font-size-large;
+  font-size: base.$font-size-x-large;
 
   &:not(:disabled) {
     // background-image: linear-gradient(to right, base.$color-pinkteddy, base.$color-bloctopus);

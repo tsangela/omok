@@ -116,7 +116,7 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
 
   return (
     <div className={styles.selectionContainer}>
-      <h1 className={styles.title}>{nthPlayer}</h1>
+      <h2 className={styles.title}>{nthPlayer}</h2>
       <OmokPieceSelection piece={piece} setPiece={setPiece} otherPlayerPieces={otherPlayerPieces} />
       <div className={styles.row}>
         {playerIndex > 0 && (
