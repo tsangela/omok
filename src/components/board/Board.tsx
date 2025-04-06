@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 
-import { incrementTurn, selectPlayers, selectTurn, setPlayerScore } from "../../store/gameSlice";
+import { incrementTurn, selectPlayers, selectTurnIndex, setPlayerScore, setTurnIndex } from "../../store/gameSlice";
 import Messages from "../../utils/messages";
 import { BOARD_SIZE } from "../../utils/constants";
 import { ScoreType } from "../../utils/enums";
 import { useAppDispatch } from "../../utils/hooks";
 import { BoardValue, Player } from "../../utils/types";
-import { inBound, nextTurn } from "../../utils/validation";
+import { inBound, nextTurnIndex } from "../../utils/validation";
 import { calculateScore, isWinner } from "../../utils/winCalculator";
 
 import { BoardTile, PreviewTile } from "../tile/Tile";
@@ -22,7 +22,7 @@ type BoardProps = {
 export function Board({ winnerIndex, setWinnerIndex }: BoardProps) {
   const dispatch = useAppDispatch();
   const players = useSelector(selectPlayers);
-  const turn = useSelector(selectTurn);
+  const turnIndex = useSelector(selectTurnIndex);
 
   const emptyBoard = () => Array(BOARD_SIZE).fill(undefined);
   const [values, setValues] = useState<(BoardValue)[]>(emptyBoard());
@@ -31,7 +31,7 @@ export function Board({ winnerIndex, setWinnerIndex }: BoardProps) {
   const canPlacePiece = (i: number) => inBound(i, values) && !values[i] && winnerIndex === undefined;
 
   function placePiece(i: number) {
-    const { piece } = players[turn];
+    const { piece } = players[turnIndex];
     if (!piece || !canPlacePiece(i)) {
       return;
     }
@@ -47,19 +47,20 @@ export function Board({ winnerIndex, setWinnerIndex }: BoardProps) {
     }
 
     // Someone won
-    const winnerScore = calculateScore(players[turn].score, ScoreType.Win);
-    dispatch(setPlayerScore({ index: turn, score: winnerScore }));
+    const winnerScore = calculateScore(players[turnIndex].score, ScoreType.Win);
+    dispatch(setPlayerScore({ index: turnIndex, score: winnerScore }));
 
-    const loserIndex = nextTurn(turn);
+    const loserIndex = nextTurnIndex(turnIndex);
     const loserScore = calculateScore(players[loserIndex].score, ScoreType.Loss);
     dispatch(setPlayerScore({ index: loserIndex, score: loserScore }));
 
-    setWinnerIndex(turn);
+    setWinnerIndex(turnIndex);
   }
 
-  function clearBoard() {
+  function rematch() {
     setValues(emptyBoard());
     setWinnerIndex(undefined);
+    dispatch(setTurnIndex(0)); // todo: alternate turns?
   }
 
   function renderTiles(Tile: typeof BoardTile | typeof PreviewTile) {
@@ -71,7 +72,7 @@ export function Board({ winnerIndex, setWinnerIndex }: BoardProps) {
             index={i}
             canPreview={canPlacePiece(i)}
             placePiece={placePiece}
-            type={players[turn].piece}
+            type={players[turnIndex].piece}
             value={value}
           />
         ))}
@@ -87,7 +88,7 @@ export function Board({ winnerIndex, setWinnerIndex }: BoardProps) {
         </div>
         {renderTiles(PreviewTile)}
         {typeof winnerIndex === "number" && (
-          <WinnerScreen clearBoard={clearBoard} winner={players[winnerIndex]} />
+          <WinnerScreen rematch={rematch} winner={players[winnerIndex]} />
         )}
       </div>
     </>
@@ -95,18 +96,18 @@ export function Board({ winnerIndex, setWinnerIndex }: BoardProps) {
 }
 
 type WinnerScreenProps = {
-  clearBoard: () => void;
+  rematch: () => void;
   winner: Player;
 }
 
-function WinnerScreen({ clearBoard, winner }: WinnerScreenProps) {
+function WinnerScreen({ rematch, winner }: WinnerScreenProps) {
   return (
     <div className={styles.winnerScreen}>
       <div className={styles.resultCard}>
         <span className={styles.name}>{winner.name}</span>
         <span className={styles.wins}>{Messages.wins}</span>
       </div>
-      <button className={styles.rematchButton} onClick={clearBoard}>
+      <button className={styles.rematchButton} onClick={rematch}>
         {Messages.rematch}
       </button>
     </div>

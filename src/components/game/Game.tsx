@@ -1,20 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { getEars, getFaces, getHairs, getSkins } from "../../api/character";
 import { setEars, setEarsFetchStatus, setFaces, setFacesFetchStatus, setHairs, setHairsFetchStatus, setSkins, setSkinsFetchStatus } from "../../store/assetsSlice";
-import { selectPlayers, setPlayerInfo } from "../../store/gameSlice";
-
 import { AssetType } from "../../utils/enums";
 import { useAppDispatch } from "../../utils/hooks";
-import { loadPlayerProgress } from "../../utils/localStorage";
 import Messages from "../../utils/messages";
 import Path from "../../utils/path";
 
 import { Board } from "../board/Board";
+import { CharacterProfiles } from "../profile/CharacterProfiles";
 import { PlayerSelection } from "../player-selection/PlayerSelection";
-import { Profile } from "../profile/Profile";
 
 import styles from "./Game.module.scss";
 
@@ -43,7 +39,7 @@ const assetOperations = {
 
 export default function Game() {
   const dispatch = useAppDispatch();
-  const players = useSelector(selectPlayers);
+
   const [showBoard, setShowBoard] = useState(false);
   const [winnerIndex, setWinnerIndex] = useState<number | undefined>(undefined);
 
@@ -59,16 +55,6 @@ export default function Game() {
     [AssetType.Ear, AssetType.Face, AssetType.Hair, AssetType.Skin].forEach(type => fetchAsset(type));
   }, []);
 
-  const startGame = useCallback(() => {
-    players.forEach(p => {
-      const playerData = loadPlayerProgress(p.name);
-      if (playerData) {
-        dispatch(setPlayerInfo({ index: p.index, overrides: playerData }));
-      }
-    });
-    setShowBoard(true);
-  }, [players]);
-
   return (
     <>
       <style>{`body{background:#e8f5ff;}`}</style>
@@ -79,15 +65,11 @@ export default function Game() {
         {showBoard
           ? (
             <>
-              <div className={styles.profilesContainer}>
-                {players.filter(player => !!player.piece).map((player, i) => (
-                  <Profile key={`player_${i}`} index={i} player={player} winnerIndex={winnerIndex} />
-                ))}
-              </div>
+              <CharacterProfiles winnerIndex={winnerIndex} />
               <Board winnerIndex={winnerIndex} setWinnerIndex={setWinnerIndex} />
             </>
           )
-          : <PlayerSelection onDone={startGame} />
+          : <PlayerSelection onDone={() => setShowBoard(true)} />
         }        
       </div>
     </>

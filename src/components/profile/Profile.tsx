@@ -4,18 +4,18 @@ import { FiArrowRight } from "react-icons/fi";
 
 import { getCharacterData, getRandomCharacterImage } from "../../api/character";
 import { selectEars, selectFaceIds, selectHairIds, selectSkins } from "../../store/assetsSlice";
-import { selectTurn, setPlayerImageUrl } from "../../store/gameSlice";
+import { selectTurnIndex, setPlayerOverrides } from "../../store/gameSlice";
 import { classNames } from "../../utils/classNames";
 import { ScoreType } from "../../utils/enums";
 import { useAppDispatch } from "../../utils/hooks";
 import Messages from "../../utils/messages";
 import { Player, Score } from "../../utils/types";
-import { isNexonHostedImageUrl } from "../../utils/validation";
 
 import { OmokPiece } from "../omok-piece/OmokPiece";
 import { Spinner } from "../spinner/Spinner";
 
 import styles from "./Profile.module.scss";
+import { isNexonHostedImageUrl } from "../../utils/validation";
 
 type ProfileProps = {
   index: number;
@@ -25,43 +25,48 @@ type ProfileProps = {
 
 export function Profile({ index, player, winnerIndex }: ProfileProps) {
   const dispatch = useAppDispatch();
-  const turn = useSelector(selectTurn);
+  const turnIndex = useSelector(selectTurnIndex);
   const ears = useSelector(selectEars);
   const faces = useSelector(selectFaceIds);
   const hairs = useSelector(selectHairIds);
   const skins = useSelector(selectSkins);
-
-  const [characterImageUrl, setCharacterImageUrl] = useState<string>(player.imageUrl);
+  
   const [loading, setLoading] = useState<boolean>(false);
-
-  const { name, score } = player;
 
   useEffect(() => {
     if (!isNexonHostedImageUrl(player.imageUrl)) {
       setLoading(true);
       getCharacterData(player.name)
-        .then(data => setCharacterImageUrl(data.characterImgURL))
+        .then(data => {
+          dispatch(setPlayerOverrides({
+            index: player.index,
+            overrides: { name: data.characterName, imageUrl: data.characterImgURL, score },
+          }));
+        })
         .catch(() => 
           getRandomCharacterImage(ears, faces, hairs, skins)
             .then(url => {
-              dispatch(setPlayerImageUrl({ index, imageUrl: url }));
-              setCharacterImageUrl(url);
+              dispatch(setPlayerOverrides({
+                index: player.index, 
+                overrides: { imageUrl: url },
+              }));
             }))
         .finally(() => setLoading(false));
     }
   }, []);
 
+  const { name, imageUrl, score } = player;
   const isWinner = index === winnerIndex;
   const isLoser = winnerIndex !== undefined && !isWinner;
 
   return (
     <div className={classNames(
       styles.card,
-      index === turn && styles.highlight,
+      index === turnIndex && styles.highlight,
       isWinner && styles.winner,
     )}>
       <ProfileImage 
-        src={characterImageUrl} 
+        src={imageUrl} 
         loading={loading}
         isLoser={isLoser}
       />

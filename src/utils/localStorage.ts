@@ -1,12 +1,14 @@
-import { Player } from "./types"
+import { Player, PlayerProfile } from "./types"
 
 const STORAGE_KEY = "PLAYERS";
 
-type PlayerData = Pick<Player, "name" | "imageUrl" | "score">;
-type StoredPlayers = { [id: string]: PlayerData };
+type StoredProfiles = { [id: string]: PlayerProfile };
 
-const toPlayerData = ({ name, imageUrl, score }: Player): PlayerData => ({ name, imageUrl, score });
+const toPlayerProfile = ({ name, imageUrl, score }: Player): PlayerProfile => ({ name, imageUrl, score });
 
+const key = (name: string) => name.toLowerCase();
+
+// todo: rename to storePlayerProfile
 export function savePlayerProgress(player: Player) {
   if (!player.name) {
     console.error("Failed to save player progress", player);
@@ -15,14 +17,15 @@ export function savePlayerProgress(player: Player) {
 
   // Retrieve stored player data
   const json = localStorage.getItem(STORAGE_KEY);
-  const players: StoredPlayers = json ? JSON.parse(json) : {};
+  const players: StoredProfiles = json ? JSON.parse(json) : {};
 
   // Update stored player data
-  players[player.name] = toPlayerData(player);
+  players[key(player.name)] = toPlayerProfile(player);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(players));
 }
 
-export function loadPlayerProgress(name: string): PlayerData | undefined {
+// todo: rename to getStoredPlayerProfile
+export function loadPlayerProgress(name: string): PlayerProfile | undefined {
   if (!name) {
     console.error("Failed to load player progress", name);
     return undefined;
@@ -30,8 +33,8 @@ export function loadPlayerProgress(name: string): PlayerData | undefined {
 
   // Retrieve stored player data
   const json = localStorage.getItem(STORAGE_KEY);
-  const players: StoredPlayers = json ? JSON.parse(json) : {};
-  return players[name];
+  const players: StoredProfiles = json ? JSON.parse(json) : {};
+  return players[key(name)];
 }
 
 export function clearProgress() {

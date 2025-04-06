@@ -1,7 +1,7 @@
 import { ButtonHTMLAttributes, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { FiAlertTriangle, FiArrowLeft, FiArrowRight } from "react-icons/fi";
-import { clearGame, selectPlayers, setPlayerInfo } from "../../store/gameSlice";
+import { clearGame, selectPlayers, setPlayerOverrides } from "../../store/gameSlice";
 import { classNames } from "../../utils/classNames";
 import { MAX_NICKNAME_CHAR_LENGTH } from "../../utils/constants";
 import { OmokPieceType } from "../../utils/enums";
@@ -12,6 +12,7 @@ import { InfoTooltip } from "../info-icon/InfoTooltip";
 import { OmokPiece } from "../omok-piece/OmokPiece";
 
 import styles from "./PlayerSelection.module.scss";
+import { loadPlayerProgress } from "../../utils/localStorage";
 
 type PlayerSelectionProps = {
   onDone: () => void;
@@ -22,9 +23,9 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
   const players = useSelector(selectPlayers);
 
   // Current form values
-  const [nickname, setNickname] = useState<string>(''); // todo: debounce
-  const [piece, setPiece] = useState<OmokPieceType>();
   const [playerIndex, setPlayerIndex] = useState(0);
+  const [nickname, setNickname] = useState<string>(''); // todo: rename to nicknameInput
+  const [piece, setPiece] = useState<OmokPieceType>(); // todo:rename to pieceSelection?
   const [warning, setWarning] = useState('');
 
   // Always start with an empty player selection 
@@ -38,7 +39,12 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
   }, [playerIndex]);
 
   // todo: useMemo uses old players state
-  const otherPlayerPieces = players.filter(p => p.index !== playerIndex).map(p => p.piece).filter(p => !!p);
+  // const otherPlayerPieces = players.filter(p => p.index !== playerIndex).map(p => p.piece).filter(p => !!p);
+  // todo: could just be 1 piece... of the other player..
+  const otherPlayerPieces = useMemo(() =>
+    players.filter(p => p.index !== playerIndex).map(p => p.piece).filter(p => !!p),
+    [players, playerIndex],
+  );
 
   const isNicknameTaken = () => players
     .filter((_, i) => i !== playerIndex)
@@ -64,17 +70,20 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
   }
 
   // Save player selection to redux store
-  const savePlayerSelections = () => {
-    dispatch(setPlayerInfo({
-      index: playerIndex,
-      overrides: {
-        name: nickname,
-        piece: piece,
-      },
+  const savePlayerSelections = (index: number, name: string, piece?: OmokPieceType) => {
+    // console.log('savePlayerSelections:', players, index, piece);
+    // const updatedPlayers = [...players] as Players;
+    // updatedPlayers[index].piece = piece;
+    // updatedPlayers[index].name = name;
+    // setPlayers(updatedPlayers);
+    const profile = loadPlayerProgress(name) ?? {};
+    dispatch(setPlayerOverrides({
+      index,
+      overrides: { name, piece, ...profile },
     }));
   };
 
-  // Load player selection from redux store
+  // Load existing selections for the given player
   const populateFields = (index: number) => {
     const player = players[index];
     setPlayerIndex(index);
@@ -90,7 +99,7 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
     }
 
     // Save selections
-    savePlayerSelections();
+    savePlayerSelections(playerIndex, nickname, piece);
 
     // Previous player
     populateFields(playerIndex - 1);
@@ -102,14 +111,20 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
     }
 
     // Save selections
-    savePlayerSelections();
+    savePlayerSelections(playerIndex, nickname, piece);
 
     if (playerIndex < players.length - 1) {
       // Go to next player
       populateFields(playerIndex + 1);
-    } else {
-      onDone();
+      return;
     }
+
+    done();
+  }
+
+  const done = () => {
+    // dispatch(initializePlayers(players));
+    onDone();
   }
 
   return (

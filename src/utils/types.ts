@@ -31,13 +31,28 @@ export type Score = {
 
 export type RawScore<T> = Exclude<T, ScoreType.Point>;
 
+// index, name, piece are only relevant for current game
+// displayName, score are saved in local storage
+// imageUrl may be save in local storage if it is a Nexon hosted image url
 export type Player = {
+  // Turn index of the player for the current game
   index: number;
+  // Name inputted by the player during game set up
   name: string;
-  imageUrl: string;
+  // Omok piece of the play for the current game
   piece?: OmokPieceType;
+  // Url of the character image used for the player
+  imageUrl: string;
+  // Total score of the player across all played games
   score: Score;
 }
+
+export type PlayerSelections = Pick<Player, "name" | "piece">;
+
+export type PlayerProfile = Pick<Player, "name" | "imageUrl" | "score">;
+
+// Player fields that should be persisted between games 
+export type PlayerData = Partial<Pick<Player, "name" | "imageUrl" | "score">>;
 
 export type Players = [p1: Player, p2: Player];
 

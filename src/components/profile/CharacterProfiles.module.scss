@@ -1,0 +1,7 @@
+@use '../../scss/base.scss' as base;
+
+.profilesContainer {
+  display: grid;
+  grid-gap: base.$spacing-8;
+  grid-template-columns: repeat(2, 1fr);
+}
