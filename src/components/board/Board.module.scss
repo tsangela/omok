@@ -48,14 +48,14 @@
 
   .name {
     z-index: 0;
-    font-family: base.$font-protest;
+    font-family: base.$font-win;
     font-size: 2rem;
     -webkit-text-stroke: 2px #8c4531;
     text-shadow: 6px 6px 16px black;
   }
 
   .wins {
-    font-family: base.$font-protest;
+    font-family: base.$font-win;
     font-size: 4rem;
     letter-spacing: -4px;
     text-transform: uppercase;
@@ -87,8 +87,8 @@
   justify-content: center;
   padding: base.$spacing-16 base.$spacing-24;
 
-  font-size: large;
-  font-family: base.$font-nanum;
+  font-size: base.$font-size-large;
+  font-family: base.$font-mono;
 
   border-radius: 100px;
   border: none;

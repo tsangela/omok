@@ -15,7 +15,7 @@ $text-stroke: 8px;
 .title {
   margin: 0;
  
-  font-family: base.$font-cherry;
+  font-family: base.$font-title;
   font-size: 10rem;
   line-height: 10rem;
   text-align: center;
@@ -28,7 +28,7 @@ $text-stroke: 8px;
 .message {
   margin: 0;
   padding: base.$spacing-8;
-  font-size: large;
+  font-size: base.$font-size-large;
   background: base.$color-white;
   color: base.$color-text-dark;
 }

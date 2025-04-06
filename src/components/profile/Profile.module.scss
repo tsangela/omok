@@ -40,6 +40,7 @@ $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
 }
 
 .name {
+  font-size: base.$font-size-medium;
   text-align: center;
   padding: $padding;
   background: base.$color-bluegrey;
@@ -57,23 +58,19 @@ $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
     padding: $padding;
   }
 
+  .label, .value {
+    justify-self: end;
+    align-self: center;
+  }
+
   .statsRow:nth-child(1) {
     display: grid;
     grid-template-columns: 1fr 1fr;
-
-    .label, .value {
-      justify-self: end;
-    }
   }
 
   .statsRow:nth-child(2) {
     display: grid;
     grid-template: 1fr 1fr / 3fr 1fr 1fr;
-  
-    .label, .value {
-      justify-self: end;
-      align-self: center;
-    }
 
     [id=total] {
       grid-area: 1 / 1 / span 3 / auto;
@@ -90,12 +87,13 @@ $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
 }
 
 .label {
-  font-size: small;
+  font-size: base.$font-size-small;
   line-height: 16px;
   align-items: center;
 }
 
 .value {
+  font-size: base.$font-size-medium;
   font-weight: 500;
 }
 
@@ -109,7 +107,7 @@ $box-shadow: 2px 2px 2px -2px base.$color-card-border inset;
   position: absolute;
   bottom: 0;
 
-  font-family: base.$font-titan;
+  font-family: base.$font-lose;
   font-size: 36px;
   letter-spacing: -4px;
   margin-bottom: base.$spacing-24;

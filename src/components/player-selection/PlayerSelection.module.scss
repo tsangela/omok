@@ -85,7 +85,7 @@ $input-height: $input-line-height + $input-padding * 2 + $input-border-width * 2
   }
   
   input, input::placeholder {
-    font-size: large;
+    font-size: base.$font-size-large;
     padding: base.$spacing-4;
     line-height: $input-line-height;
     text-align: center;
@@ -95,10 +95,10 @@ $input-height: $input-line-height + $input-padding * 2 + $input-border-width * 2
     display: none;
     position: absolute;
     top: $input-height;
-    margin-top: base.$spacing-4;
+    margin-top: base.$spacing-8;
 
     color: base.$color-red;
-    font-size: small;
+    font-size: base.$font-size-small;
 
     &.show {
       display: grid;
@@ -114,8 +114,8 @@ $input-height: $input-line-height + $input-padding * 2 + $input-border-width * 2
 
   .inputInfo {
     position: absolute;
-    right: base.$spacing-6;
-    margin: base.$spacing-4 0;
+    right: base.$spacing-8;
+    margin: base.$spacing-6 0;
   }
 }
 
@@ -127,7 +127,7 @@ $input-height: $input-line-height + $input-padding * 2 + $input-border-width * 2
   padding: base.$spacing-8 base.$spacing-12;
   border-radius: 100px;
   border: none;
-  font-size: large;
+  font-size: base.$font-size-large;
 
   &:not(:disabled) {
     // background-image: linear-gradient(to right, base.$color-pinkteddy, base.$color-bloctopus);
