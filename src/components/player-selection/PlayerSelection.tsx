@@ -24,8 +24,8 @@ export function PlayerSelection({ onDone }: PlayerSelectionProps) {
 
   // Current form values
   const [playerIndex, setPlayerIndex] = useState(0);
-  const [nickname, setNickname] = useState<string>(''); // todo: rename to nicknameInput
-  const [piece, setPiece] = useState<OmokPieceType>(); // todo:rename to pieceSelection?
+  const [nickname, setNickname] = useState<string>('');
+  const [piece, setPiece] = useState<OmokPieceType>();
   const [warning, setWarning] = useState('');
 
   // Always start with an empty player selection 
