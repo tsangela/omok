@@ -157,7 +157,7 @@ function OmokPieceSelection({ otherPlayerPieces, piece, setPiece }: OmokPieceSel
                 className={classNames(styles.omokPieceButton, selected && styles.selected)}
                 onClick={() => setPiece(type === piece ? undefined : type)}
               >
-                <OmokPiece type={type} />
+                <OmokPiece type={type} size="large" />
               </button>
             )
           }

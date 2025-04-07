@@ -5,7 +5,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  grid-gap: base.$spacing-16;
+  grid-gap: base.$spacing-32;
 }
 
 .title {
@@ -18,7 +18,7 @@
 
 .omokPiecesContainer {
   display: grid;
-  grid-gap: base.$spacing-16;
+  grid-gap: base.$spacing-32;
   grid-template-columns: repeat(4, 1fr);
 }
 
