@@ -1,6 +1,7 @@
 @use '../../scss/base.scss' as base;
 
 $tile-width: 3.125rem;
+$guideline-point-width: 3px;
 
 .tile {
   position: relative;
@@ -41,11 +42,12 @@ $tile-width: 3.125rem;
   }
 
   > span {
-    &:before {
-      color: base.$color-board-guideline;
-      font-size: 20px;
-      margin-left: 2px;
-      content: "\B7";
-    }
+    z-index: -1;
+    position: absolute;
+    display: block;
+    width: $guideline-point-width;
+    height: $guideline-point-width;
+    background: base.$color-board-guideline;
+    border-radius: 100%;
   }
 }
